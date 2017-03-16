@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd                     http://www.springframework.org/schema/context                     http://www.springframework.org/schema/context/spring-context-2.5.xsd                     ">
+  <context:component-scan base-package="com.persia">
+    <!-- 开启组件扫描 -->
+  </context:component-scan>
+  <context:annotation-config>
+    <!--开启注解处理器 -->
+  </context:annotation-config>
+  <!-- 使用注解,省去了propertity的xml配置，减少xml文件大小 -->
+  <bean class="com.persia.PersonServiceAnnotation" id="personServiceAnno"/>
+  <bean class="com.persia.PersonDaoBean" id="personDaoBeanAnno"/>
+  <bean class="com.persia.PersonDaoBean" id="personDaoBeanAnno2"/>
+  <!-- 自动注解 -->
+  <bean autowire="byName" class="com.persia.PersonServiceAutoInject" id="personServiceAutoInject"/>
+  <bean class="com.persia.PersonServiceBean" id="personService">
+    <!-- 由spring容器去创建和维护，我们只要获取就可以了 -->
+  </bean>
+  <bean class="com.persia.PersonServiceBeanFactory" destroy-method="destory" factory-method="createInstance" id="personService2" init-method="init" lazy-init="true">
+    <!-- 静态工厂获取bean -->
+  </bean>
+  <bean class="com.persia.PersonServiceBeanInsFactory" id="fac"/>
+  <bean factory-bean="fac" factory-method="createInstance" id="personService3" scope="prototype">
+    <!-- 实例工厂获取bean，先实例化工厂再实例化bean -->
+  </bean>
+  <!-- ref方式注入属性 -->
+  <bean class="com.persia.PersonDaoBean" id="personDao"/>
+  <bean class="com.persia.PersonServiceBean" id="personService4">
+    <property name="personDao" ref="personDao"/>
+  </bean>
+  <!-- 内部bean方式注入 -->
+  <bean class="com.persia.PersonServiceBean" id="personService5">
+    <property name="personDao">
+      <bean class="com.persia.PersonDaoBean"/>
+    </property>
+    <property name="name" value="persia"/>
+    <property name="age" value="21"/>
+    <property name="sets">
+      <!-- 集合的注入 -->
+      <set>
+        <value>第一个</value>
+        <value>第二个</value>
+        <value>第三个</value>
+      </set>
+    </property>
+    <property name="lists">
+      <!-- 集合的注入 -->
+      <list>
+        <value>第一个l</value>
+        <value>第二个l</value>
+        <value>第三个l</value>
+      </list>
+    </property>
+    <property name="properties">
+      <props>
+        <prop key="key1">value1</prop>
+        <prop key="key2">value2</prop>
+        <prop key="key3">value3</prop>
+      </props>
+    </property>
+    <property name="map">
+      <map>
+        <entry key="key1" value="value-1"/>
+        <entry key="key2" value="value-2"/>
+        <entry key="key3" value="value-3"/>
+      </map>
+    </property>
+  </bean>
+  <bean class="com.persia.PersonServiceBean" id="personService6">
+    <constructor-arg index="0" value="构造注入的name"/>
+    <!-- 基本类型可以不写type -->
+    <constructor-arg index="1" ref="personDao" type="com.persia.IDaoBean"/>
+  </bean>
+</beans>

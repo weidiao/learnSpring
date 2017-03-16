@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+       <!-- 自动扫描且只扫描@Controller -->
+       <context:component-scan base-package="com.pomelo.car.web.controller">
+              <context:include-filter type="annotation"
+                                      expression="org.springframework.stereotype.Controller" />
+              <context:include-filter type="annotation"
+                                      expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+       </context:component-scan>
+
+    <!-- 启动JSON格式的配置 -->
+    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <!--解决 HttpMediaTypeNotAcceptableException: Could not find acceptable representation -->
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <mvc:annotation-driven/>
+
+    <!-- velocity解析器,替换掉原来的jsp -->
+    <bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath">
+            <value>/</value>
+        </property>
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+                <prop key="velocimacro.library">WEB-INF/velocity/macro/macros.vm</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="prefix" value="/html/" /><!-- 视图文件的前缀，即存放的路径 -->
+        <property name="suffix" value=".html" />
+    </bean>
+</beans>
+
+
+
+
+

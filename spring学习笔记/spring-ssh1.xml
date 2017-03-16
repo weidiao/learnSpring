@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                    http://www.springframework.org/schema/context
+                    http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                    http://www.springframework.org/schema/aop
+                    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+                    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+                   ">
+
+  <!-- 配置数据源 -->
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    destroy-method="close">
+    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    <property name="url"
+      value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf-8" />
+    <property name="username" value="root" />
+    <property name="password" value="" />
+    <!-- 连接池启动时的初始值 -->
+    <property name="initialSize" value="1" />
+    <!-- 连接池的最大值 -->
+    <property name="maxActive" value="500" />
+    <!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
+    <property name="maxIdle" value="2" />
+    <!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+    <property name="minIdle" value="1" />
+  </bean>
+
+  <!-- 配置hibernate的sessionFactory -->
+  <bean id="sessionFactory"
+    class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource">
+      <ref bean="dataSource" />
+    </property>
+    <property name="mappingResources">
+      <list>
+        <value>com/persia/model/Person.hbm.xml</value>
+      </list>
+    </property>
+
+    <!-- 1.首先在sessionFactory里面配置以上3条设置 -->
+    <!-- 2.然后得在类路径下面添加一个ehcache.xml的缓存配置文件 -->
+    <!-- 3.最后在要使用缓存的实体bean的映射文件里面配置缓存设置 -->
+    <!--使用二级缓存 -->
+    <!-- 不使用查询缓存，因为命中率不是很高 -->
+    <!-- 使用Ehcache缓存产品 -->
+    <property name="hibernateProperties">
+      <value>
+        hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+        hibernate.hbm2ddl.auto=update
+        hibernate.show_sql=false
+        hibernate.format_sql=false
+        hibernate.cache.use_second_level_cache=true
+        hibernate.cache.use_query_cache=false
+        hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider
+      </value>
+    </property>
+  </bean>
+
+
+  <!-- 配置Spring针对hibernate的事务管理器 -->
+  <bean id="txManager"
+    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+
+  <!-- 配置使用注解的方式来使用事务 -->
+  <tx:annotation-driven transaction-manager="txManager" />
+
+
+  <!-- 使用手工配置的注解方式来注入bean -->
+  <context:annotation-config></context:annotation-config>
+
+
+  <!--定义要注入的业务bean -->
+  <bean id="personService" class="com.persia.service.impl.PersonServiceImpl"></bean>
+
+
+  <!--将Struts的action交给Spring容器来管理 -->
+  <bean name="/person/list" class="com.persia.struts.PersonListAction">
+    <!--1.这里要求name和struts-config里面的action的path名称一致，因为id不允许有特殊字符 -->
+    <!--2.还得在Struts-config文件里面添加Spring的请求处理器，该处理器会根据action的path属性到Spring容器里面寻找这个bean，若找到了则用这个bean来处理用户的请求 -->
+    <!--3.然后去掉action的type标签和值（可选），当Spring处理器找不到该bean时，才会使用Struts的action -->
+    <!--4.最后在action里面使用Spring的注入方式来注入业务bean -->
+  </bean>
+
+
+  <bean name="/person/manage" class="com.persia.struts.PersonManageAction"></bean>
+</beans>

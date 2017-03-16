@@ -1,0 +1,16 @@
+1：修改该项目目录下：.project文件
+	<projectDescription>
+		<name>SpringMVC-Annotation</name>
+		<comment></comment> 
+2：项目右键属性 --> Web Project Settings --> Context root
+3:修改项目目录下：.settings\org.eclipse.wst.common.component
+
+	<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+	    <wb-module deploy-name="SpringMVC">
+	        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+	        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+	        <property name="Java-output-path" value="/SpringMVC/build/classes"/>
+	        <property name="context-root" value="SpringMVC-Annotation"/>
+	    </wb-module>
+	</project-modules>
+ 4.eclipse工程目录下的文件都是文本文件可以直接编辑，挨个试查找工程名称。

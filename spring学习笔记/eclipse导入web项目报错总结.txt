@@ -1,0 +1,8 @@
+1.Resource编码
+2.项目名称要彻底改变
+3.java8对spring4.0支持完好，spring3.2只能在java7及之前的版本上运行。
+	Note that the Java 8 bytecode level (-target 1.8, as required by -source 1.8) is only fully supported as of Spring Framework 4.0. In particular, Spring 3.2 based applications need to be compiled with a maximum of Java 7 as the target, even if they happen to be deployed onto a Java 8 runtime. Please upgrade to Spring 4 for Java 8 based applications.
+4.包不兼容，包跟jre版本不兼容。把从网上下载的web项目中的lib全部删掉，用自己用过的确保正确的库
+5.包有重复，删掉重复包
+6.包依赖不完全，缺少包；包依赖旧版本的包，结果发现没有。
+7.右键项目属性，修改facet，project web settings等内容

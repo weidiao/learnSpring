@@ -1,0 +1,26 @@
+采用抽象类org.mybatis.spring.support.SqlSessionDaoSupport提供SqlSession。
+   (1)spring配置文件:
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+   <property name="dataSource" ref="dataSource" />
+   <property  name="configLocation"  value="classpath:sqlMapConfig.xml"/>
+   <!-- <property  name="mapperLocations"  value="classpath*:com/xxt/ibatis/dbcp/domain/user.map.xml"/   >  -->
+</bean>
+
+<bean id="sqlSession"     class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg index="0" ref="sqlSessionFactory" /> 
+</bean>
+
+<bean id="userDaoImpl3" class="com.xxt.ibatis.dbcp.dao.impl.UserDaoImpl3">
+   <!--注入SqlSessionTemplate实例 -->
+   <property name="sqlSessionTemplate" ref="sqlSession" /> 
+   <!--也可直接注入SqlSessionFactory实例，二者都指定时，SqlSessionFactory失效 -->
+   <!-- <property name="sqlSessionFactory" ref="sqlSessionFactory" /> 
+-->
+</bean>
+
+ (2) dao层接口实现类UserDaoImpl3：
+public class UserDaoImpl3 extends SqlSessionDaoSupport implements UserDao {   
+  public User getUserById(User user) {   
+     return (User) getSqlSession().selectOne("com.xxt.ibatis.dbcp.domain.User.getUser", user);  
+  }   
+}

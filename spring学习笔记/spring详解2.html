@@ -1,0 +1,1159 @@
+<div id="blog_content" class="blog_content">
+    <p style="text-align: left;">资源下载：</p>
+<p><a target="_blank" href="http://dl.iteye.com/topics/download/82663b25-d84d-392c-9097-e95dcb8f7437">Spring_MVC_教程_快速入门_深入分析V1.1.pdf</a>
+</p>
+<p><a target="_blank" href="http://dl.iteye.com/topics/download/eda52cf5-07ed-3604-97ef-9bccabd2a734">SpringMVC核心配置文件示例.rar</a>
+ </p>
+<p style="text-align: left;">&nbsp;</p>
+<p style="text-align: left;">&nbsp;</p>
+<p>作者：赵磊</p>
+<p>博客：http://elf8848.iteye.com</p>
+<p>&nbsp;</p>
+<p style="text-align: left;"><span style="font-size: medium;"><strong>目录 </strong>
+</span>
+<br><br>
+一、前言<br>
+二、<a href="http://lib.csdn.net/base/17" class="replace_word" title="Java EE知识库" target="_blank" style="color:#df3434; font-weight:bold;">spring</a> mvc 核心类与接口<br>
+三、spring mvc&nbsp;核心流程图</p>
+<p style="text-align: left;">
+四、spring mvc&nbsp;DispatcherServlet说明</p>
+<p style="text-align: left;">
+五、spring mvc 父子上下文的说明</p>
+<p style="text-align: left;">
+六、springMVC-mvc.xml 配置文件片段讲解 <br>
+七、spring mvc&nbsp;如何访问到静态的文件，如jpg,js,css</p>
+<p style="text-align: left;">
+八、spring mvc&nbsp;请求如何映射到具体的Action中的方法</p>
+<p style="text-align: left;"><span>
+九、</span>
+spring mvc&nbsp;<span>中的拦截器：<br>
+十、</span>
+spring mvc&nbsp;如何使用拦截器</p>
+<p style="text-align: left;"><span>
+十一、</span>
+spring mvc&nbsp;如何实现全局的异常处理</p>
+<p style="text-align: left;"><span>
+十二、</span>
+spring mvc&nbsp;如何把全局异常记录到日志中</p>
+<p style="text-align: left;"><span>
+十三、</span>
+如何给spring3 MVC中的Action做JUnit单元测试 </p>
+<p style="text-align: left;"><span>
+十四、</span>
+spring mvc&nbsp;转发与重定向 （带参数重定向）</p>
+<p style="text-align: left;"><span>
+十五、</span>
+spring mvc&nbsp;处理ajax请求</p>
+<p style="text-align: left;"><span>
+十六、</span>
+spring mvc&nbsp;关于写几个配置文件的说明&nbsp;</p>
+<p style="text-align: left;"><span>
+十七、</span>
+spring mvc&nbsp;如何取得Spring管理的bean</p>
+<p style="text-align: left;"><span>
+十八、</span>
+spring mvc&nbsp;多视图控制器</p>
+<p style="text-align: left;"><span>
+十九、 &lt;mvc:annotation-driven /&gt; 到底做了什么工作 <br>
+二十、 本文中springMVC.xml配置文件是核心，这里给一个下载地址</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p style="text-align: left;">说明：本作者是文章的原创作者，转载请注明出处：本文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p style="text-align: left;">&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">一、前言：</span>
+</strong>
+</p>
+<p>为开发团队选择一款优秀的MVC框架是件难事儿，在众多可行的方案中决择需要很高的经验和水平。你的一个决定会影响团队未来的几年。要考虑方面太多：</p>
+<p>1、简单易用，以提高开发效率。使小部分的精力在框架上，大部分的精力放在业务上。</p>
+<p>2、性能优秀，这是一个最能吸引眼球的话题。</p>
+<p>3、尽量使用大众的框架（避免使用小众的、私有的框架），新招聘来的开发人员有一些这方面技术积累，减低人员流动再适应的影响。</p>
+<p>&nbsp;</p>
+<p>如果你还在为这件事件发愁，本文最适合你了。选择Spring MVC吧。</p>
+<p>&nbsp;</p>
+<p>Spring MVC是当前最优秀的MVC框架，自从Spring 2.5版本发布后，由于支持注解配置，易用性有了大幅度的提高。Spring 3.0更加完善，实现了对Struts 2的超越。现在越来越多的开发团队选择了Spring MVC。</p>
+<p>&nbsp;</p>
+<p>Struts2也是非常优秀的MVC构架，优点非常多比如良好的结构，拦截器的思想，丰富的功能。但这里想说的是缺点，Struts2由于采用了值栈、OGNL表达式、struts2标签库等，会导致应用的性能下降，应避免使用这些功能。而Struts2的多层拦截器、多实例action性能都很好。可以参考我写的一篇关于Spring MVC与Struts2与Servlet比较的文章<a href="/admin/blogs/698217">《Struts2、SpringMVC、Servlet(Jsp)性能对比 测试》</a>
+</p>
+<p>&nbsp;</p>
+<p>Spring3 MVC的优点：</p>
+<p>1、Spring3 MVC使用简单，学习成本低。学习难度小于Struts2，Struts2用不上的多余功能太多。呵呵，当然这不是决定因素。</p>
+<p>2、Spring3 MVC很容易就可以写出性能优秀的程序，Struts2要处处小心才可以写出性能优秀的程序（指MVC部分）</p>
+<p>3、Spring3 MVC的灵活是你无法想像的，Spring框架的扩展性有口皆碑，Spring3 MVC当然也不会落后，不会因使用了MVC框架而感到有任何的限制。</p>
+<p>&nbsp;</p>
+<p>Struts2的众多优点：</p>
+<p>1、老牌的知名框架，从Struts1起积累了大量用户群体。技术文档丰富。</p>
+<p>2、其它方面略...&nbsp;&nbsp; (呵呵，是不是不公平？)</p>
+<p>&nbsp;</p>
+<p>Spring的官方下载网址是：<a href="http://www.springsource.org/download">http://www.springsource.org/download</a>
+&nbsp;&nbsp; （本文使用是的Spring 3.0.5版本）</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">二、核心类与接口：</span>
+</strong>
+</p>
+<p>&nbsp;</p>
+<p>先来了解一下，几个重要的接口与类。现在不知道他们是干什么的没关系，先混个脸熟，为以后认识他们打个基础。</p>
+<p>&nbsp;</p>
+<p>DispatcherServlet&nbsp;&nbsp; -- 前置控制器</p>
+<p><img height="205" style="border: 1px solid black;" width="368" alt="" src="http://dl.iteye.com/upload/attachment/486300/3f5703e2-b29e-3eda-a7ac-acbe4ce7a6d3.jpg"></p>
+<p>&nbsp;</p>
+<p>HandlerMapping接口 -- 处理请求的映射</p>
+<p>HandlerMapping接口的实现类：</p>
+<p>SimpleUrlHandlerMapping&nbsp; 通过配置文件，把一个URL映射到Controller</p>
+<p>DefaultAnnotationHandlerMapping&nbsp; 通过注解，把一个URL映射到Controller类上</p>
+<p><img height="212" style="border: 1px solid black;" width="439" alt="" src="http://dl.iteye.com/upload/attachment/486286/c6b474c8-91fa-3009-a0e9-c868ca52baf2.jpg"></p>
+<p>&nbsp;</p>
+<p>HandlerAdapter接口 -- 处理请求的映射</p>
+<p>AnnotationMethodHandlerAdapter类，通过注解，把一个URL映射到Controller类的方法上</p>
+<p><img height="138" style="border: 1px solid black;" width="411" alt="" src="http://dl.iteye.com/upload/attachment/486402/8475318e-d2e2-3dd2-81e9-036090f0aad1.jpg"></p>
+<p>&nbsp;</p>
+<p>Controller接口 -- 控制器</p>
+<p>由于我们使用了@Controller注解，添加了@Controller注解注解的类就可以担任控制器（Action）的职责,</p>
+<p>所以我们并没有用到这个接口。</p>
+<p><img height="268" style="border: 1px solid black;" width="367" alt="" src="http://dl.iteye.com/upload/attachment/486302/67b19bd0-e44c-311a-8d05-80d013cf44ae.jpg"></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>HandlerInterceptor 接口--拦截器</p>
+<p>无图，我们自己实现这个接口，来完成拦截的器的工作。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>ViewResolver接口的实现类</p>
+<p>UrlBasedViewResolver类 通过配置文件，把一个视图名交给到一个View来处理</p>
+<p>InternalResourceViewResolver类，比上面的类，加入了JSTL的支持</p>
+<p><img height="293" style="border: 1px solid black;" width="358" alt="" src="http://dl.iteye.com/upload/attachment/486322/7d130bbd-577e-3b0f-94b4-8a4fb4c779d5.jpg"></p>
+<p>&nbsp;</p>
+<p>View接口</p>
+<p>JstlView类</p>
+<p><img height="505" style="border: 1px solid black;" width="395" alt="" src="http://dl.iteye.com/upload/attachment/486339/c1e3caff-135b-3420-90b9-d3d2033c759b.jpg"></p>
+<p>&nbsp;</p>
+<p>LocalResolver接口</p>
+<p><img height="150" style="border: 1px solid black;" width="284" alt="" src="http://dl.iteye.com/upload/attachment/486341/d631fde8-9c47-3902-a437-6ec6141556b5.jpg"></p>
+<p>&nbsp;</p>
+<p>HandlerExceptionResolver接口 --异常处理</p>
+<p>SimpleMappingExceptionResolver实现类</p>
+<p><img height="145" style="border: 1px solid black;" width="387" alt="" src="http://dl.iteye.com/upload/attachment/486343/5b6a3428-abf3-3f05-9d26-f0232fb33ec7.jpg"></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>ModelAndView类</p>
+<p>无图。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">三、核心流程图</span>
+</strong>
+</p>
+<p>&nbsp;</p>
+<p>本图是我个人画的，有不严谨的地方，大家对付看吧。总比没的看强。</p>
+<p><img height="1070" width="779" alt="" src="http://dl.iteye.com/upload/attachment/0068/8752/620f63e1-ee68-30c9-a53d-13107e634364.png"></p>
+<p>转载请注明出处：本文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><br><strong><span style="font-size: medium;">四、DispatcherServlet说明</span>
+</strong>
+</p>
+<p>&nbsp;</p>
+<p>使用Spring MVC,配置DispatcherServlet是第一步。</p>
+<p>DispatcherServlet是一个Servlet,所以可以配置多个DispatcherServlet。</p>
+<p>DispatcherServlet是前置控制器，配置在web.xml文件中的。拦截匹配的请求，Servlet拦截匹配规则要自已定义，把拦截下来的请求，依据某某规则分发到目标Controller(我们写的Action)来处理。</p>
+<p>&nbsp;</p>
+<p>“某某规则”：是根据你使用了哪个HandlerMapping接口的实现类的不同而不同。</p>
+<p>&nbsp;</p>
+<p>先来看第一个例子：</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cweb-app%3E%0A%20%20%20%20%3Cservlet%3E%0A%20%20%20%20%20%20%20%20%3Cservlet-name%3Eexample%3C%2Fservlet-name%3E%0A%20%20%20%20%20%20%20%20%3Cservlet-class%3Eorg.springframework.web.servlet.DispatcherServlet%3C%2Fservlet-class%3E%0A%20%20%20%20%20%20%20%20%3Cload-on-startup%3E1%3C%2Fload-on-startup%3E%0A%20%20%20%20%3C%2Fservlet%3E%0A%20%20%20%20%3Cservlet-mapping%3E%0A%20%20%20%20%20%20%20%20%3Cservlet-name%3Eexample%3C%2Fservlet-name%3E%0A%20%20%20%20%20%20%20%20%3Curl-pattern%3E*.form%3C%2Furl-pattern%3E%0A%20%20%20%20%3C%2Fservlet-mapping%3E%0A%3C%2Fweb-app%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">web-app</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>example</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-class</span><span class="tag">&gt;</span><span>org.springframework.web.servlet.DispatcherServlet</span><span class="tag">&lt;/</span><span class="tag-name">servlet-class</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">load-on-startup</span><span class="tag">&gt;</span><span>1</span><span class="tag">&lt;/</span><span class="tag-name">load-on-startup</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">servlet</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>example</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>*.form</span><span class="tag">&lt;/</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">web-app</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="0" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;example&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;example&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.form&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;</pre>
+<p>&nbsp;&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;是启动顺序，让这个Servlet随Servletp容器一起启动。</p>
+<p>&nbsp;&lt;url-pattern&gt;*.form&lt;/url-pattern&gt; 会拦截*.form结尾的请求。</p>
+<p>&nbsp;</p>
+<p>&nbsp;&lt;servlet-name&gt;example&lt;/servlet-name&gt;这个Servlet的名字是example，可以有多个DispatcherServlet，是通过名字来区分的。每一个DispatcherServlet有自己的WebApplicationContext上下文对象。同时保存的ServletContext中和Request对象中，关于key，以后说明。</p>
+<p>&nbsp;</p>
+<p>在DispatcherServlet的初始化过程中，框架会在web应用的 WEB-INF文件夹下寻找名为[servlet-name]-servlet.xml 的配置文件，生成文件中定义的bean。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>第二个例子：</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%09%3Cservlet%3E%0A%09%09%3Cservlet-name%3EspringMVC%3C%2Fservlet-name%3E%0A%09%09%3Cservlet-class%3Eorg.springframework.web.servlet.DispatcherServlet%3C%2Fservlet-class%3E%0A%09%09%3Cinit-param%3E%0A%09%09%09%3Cparam-name%3EcontextConfigLocation%3C%2Fparam-name%3E%0A%09%09%09%3Cparam-value%3Eclasspath*%3A%2FspringMVC.xml%3C%2Fparam-value%3E%0A%09%09%3C%2Finit-param%3E%0A%09%09%3Cload-on-startup%3E1%3C%2Fload-on-startup%3E%0A%09%3C%2Fservlet%3E%0A%09%3Cservlet-mapping%3E%0A%09%09%3Cservlet-name%3EspringMVC%3C%2Fservlet-name%3E%0A%09%09%3Curl-pattern%3E%2F%3C%2Furl-pattern%3E%0A%09%3C%2Fservlet-mapping%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">servlet</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>springMVC</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-class</span><span class="tag">&gt;</span><span>org.springframework.web.servlet.DispatcherServlet</span><span class="tag">&lt;/</span><span class="tag-name">servlet-class</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">init-param</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">param-name</span><span class="tag">&gt;</span><span>contextConfigLocation</span><span class="tag">&lt;/</span><span class="tag-name">param-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">param-value</span><span class="tag">&gt;</span><span>classpath*:/springMVC.xml</span><span class="tag">&lt;/</span><span class="tag-name">param-value</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">init-param</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">load-on-startup</span><span class="tag">&gt;</span><span>1</span><span class="tag">&lt;/</span><span class="tag-name">load-on-startup</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">servlet</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>springMVC</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>/</span><span class="tag">&lt;/</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="1" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">	&lt;servlet&gt;
+		&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+		&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+		&lt;init-param&gt;
+			&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+			&lt;param-value&gt;classpath*:/springMVC.xml&lt;/param-value&gt;
+		&lt;/init-param&gt;
+		&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+	&lt;/servlet&gt;
+	&lt;servlet-mapping&gt;
+		&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+		&lt;url-pattern&gt;/&lt;/url-pattern&gt;
+	&lt;/servlet-mapping&gt;</pre>
+<p>指明了配置文件的文件名，不使用默认配置文件名，而使用springMVC.xml配置文件。</p>
+<p>其中&lt;param-value&gt;**.xml&lt;/param-value&gt; 这里可以使用多种写法<br>
+1、不写,使用默认值:/WEB-INF/&lt;servlet-name&gt;-servlet.xml<br>
+2、&lt;param-value&gt;/WEB-INF/classes/springMVC.xml&lt;/param-value&gt;<br>
+3、&lt;param-value&gt;classpath*:springMVC-mvc.xml&lt;/param-value&gt;<br>
+4、多个值用逗号分隔</p>
+<p>&nbsp;</p>
+<p><br><strong>Servlet拦截匹配规则可以自已定义，拦截哪种URL合适？</strong>
+<br>
+当映射为@RequestMapping("/user/add")时，为例：</p>
+<p><br>
+1、拦截*.do、*.htm， 例如：/user/add.do </p>
+<p>这是最传统的方式，最简单也最实用。不会导致静态文件（jpg,js,css）被拦截。</p>
+<p>&nbsp;</p>
+<p>2、拦截/，例如：/user/add</p>
+<p>可以实现现在很流行的REST风格。很多互联网类型的应用很喜欢这种风格的URL。</p>
+<p>弊端：会导致静态文件（jpg,js,css）被拦截后不能正常显示。想实现REST风格，事情就是麻烦一些。后面有解决办法还算简单。</p>
+<p>&nbsp;</p>
+<p>3、拦截/*，这是一个错误的方式，请求可以走到Action中，但转到jsp时再次被拦截，不能访问到jsp。</p>
+<p>&nbsp;</p>
+<p>转载请注明出处：本文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><strong>五、父子上下文(WebApplicationContext)</strong>
+</span>
+</p>
+<p>&nbsp;</p>
+<p>如果你使用了listener监听器来加载配置，一般在Struts+Spring+<a href="http://lib.csdn.net/base/17" class="replace_word" title="Java EE知识库" target="_blank" style="color:#df3434; font-weight:bold;">hibernate</a>的项目中都是使用listener监听器的。如下</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Clistener%3E%20%0A%20%20%3Clistener-class%3Eorg.springframework.web.context.ContextLoaderListener%3C%2Flistener-class%3E%20%0A%3C%2Flistener%3E%20%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span>&lt;listener&gt;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&lt;listener-<span class="keyword">class</span><span>&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-</span><span class="keyword">class</span><span>&gt;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&lt;/listener&gt;&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="2" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;listener&gt; 
+  &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt; 
+&lt;/listener&gt; 
+</pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Spring会创建一个WebApplicationContext上下文，称为父上下文（父容器） ，保存在 ServletContext中，key是WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE的值。</p>
+<p>可以使用Spring提供的工具类取出上下文对象：WebApplicationContextUtils.getWebApplicationContext(ServletContext);</p>
+<p>&nbsp;</p>
+<p>DispatcherServlet是一个Servlet,可以同时配置多个，每个 DispatcherServlet有一个自己的上下文对象（WebApplicationContext），称为子上下文（子容器），子上下文可以访问父上下文中的内容，但父上下文不能访问子上下文中的内容。 它也保存在 ServletContext中，key是"org.springframework.web.servlet.FrameworkServlet.CONTEXT"+Servlet名称。当一个Request对象产生时，会把这个子上下文对象（WebApplicationContext）保存在Request对象中，key是DispatcherServlet.class.getName() + ".CONTEXT"。</p>
+<p>可以使用工具类取出上下文对象：RequestContextUtils.getWebApplicationContext(request);</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>说明 ：Spring 并没有限制我们，必须使用父子上下文。我们可以自己决定如何使用。</p>
+<p>&nbsp;</p>
+<p><strong>方案一，传统型： </strong>
+</p>
+<p>父上下文容器中保存数据源、服务层、DAO层、事务的Bean。</p>
+<p>子上下文容器中保存Mvc相关的Action的Bean.</p>
+<p>事务控制在服务层。</p>
+<p>由于父上下文容器不能访问子上下文容器中内容，事务的Bean在父上下文容器中，无法访问子上下文容器中内容，就无法对子上下文容器中Action进行AOP（事务）。</p>
+<p>当然，做为“传统型”方案，也没有必要这要做。</p>
+<p>&nbsp;</p>
+<p><strong>方案二，激进型：</strong>
+</p>
+<p><a href="http://lib.csdn.net/base/17" class="replace_word" title="Java EE知识库" target="_blank" style="color:#df3434; font-weight:bold;">Java</a>世界的“面向接口编程”的思想是正确的，但在增删改查为主业务的系统里，Dao层接口，Dao层实现类，Service层接口，Service层实现类，Action父类，Action。再加上众多的O(vo\po\bo)和jsp页面。写一个小功能 7、8个类就写出来了。 开发者说我就是想接点私活儿，和PHP，ASP抢抢饭碗，但我又是Java程序员。最好的结果是大项目能做好，小项目能做快。所以“激进型”方案就出现了-----没有接口、没有Service层、还可以没有众多的O(vo\po\bo)。那没有Service层事务控制在哪一层？只好上升的Action层。</p>
+<p>本文不想说这是不是正确的思想，我想说的是Spring不会限制你这样做。</p>
+<p>由于有了父子上下文，你将无法实现这一目标。解决方案是<span style="color: #ff0000;"><strong>只使用子上下文容器，不要父上下文容器</strong>
+</span>
+。所以数据源、服务层、DAO层、事务的Bean、Action的Bean都放在子上下文容器中。就可以实现了，事务（注解事务）就正常工作了。这样才够激进。</p>
+<p>总结：不使用listener监听器来加载spring的配置文件，只使用DispatcherServlet来加载spring的配置，不要父子上下文，只使用一个DispatcherServlet，事情就简单了，什么麻烦事儿也没有了。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Java--大项目能做好--按传统方式做，规规矩矩的做，好扩展，好维护。</p>
+<p>Java--小项目能做快--按激进方式做，一周时间就可以出一个版本，先上线接受市场(用户)的反馈，再改进，再反馈，时间就是生命(成本)。</p>
+<p>&nbsp;</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><strong>六、springMVC-mvc.xml 配置文件片段讲解</strong>
+<span style="font-size: small;">（未使用默认配置文件名）</span>
+</span>
+</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%3F%3E%0A%3Cbeans%0A%09xmlns%3D%22http%3A%2F%2Fwww.springframework.org%2Fschema%2Fbeans%22%0A%09xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%0A%09xmlns%3Atx%3D%22http%3A%2F%2Fwww.springframework.org%2Fschema%2Ftx%22%0A%09xmlns%3Acontext%3D%22http%3A%2F%2Fwww.springframework.org%2Fschema%2Fcontext%22%20%20%0A%09xmlns%3Amvc%3D%22http%3A%2F%2Fwww.springframework.org%2Fschema%2Fmvc%22%20%20%0A%09xsi%3AschemaLocation%3D%22http%3A%2F%2Fwww.springframework.org%2Fschema%2Fbeans%20%0A%09http%3A%2F%2Fwww.springframework.org%2Fschema%2Fbeans%2Fspring-beans-3.0.xsd%20%0A%09http%3A%2F%2Fwww.springframework.org%2Fschema%2Ftx%20%0A%09http%3A%2F%2Fwww.springframework.org%2Fschema%2Ftx%2Fspring-tx-3.0.xsd%0A%09http%3A%2F%2Fwww.springframework.org%2Fschema%2Fcontext%0A%20%20%20%20http%3A%2F%2Fwww.springframework.org%2Fschema%2Fcontext%2Fspring-context-3.0.xsd%0A%09http%3A%2F%2Fwww.springframework.org%2Fschema%2Fmvc%0A%20%20%20%20http%3A%2F%2Fwww.springframework.org%2Fschema%2Fmvc%2Fspring-mvc-3.0.xsd%22%3E%0A%0A%0A%20%20%20%20%3C!--%20%E8%87%AA%E5%8A%A8%E6%89%AB%E6%8F%8F%E7%9A%84%E5%8C%85%E5%90%8D%20--%3E%0A%20%20%20%20%3Ccontext%3Acomponent-scan%20base-package%3D%22com.app%2Ccom.core%2CJUnit4%22%20%3E%3C%2Fcontext%3Acomponent-scan%3E%0A%20%20%20%20%0A%20%20%20%20%3C!--%20%E9%BB%98%E8%AE%A4%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%98%A0%E5%B0%84%E7%9A%84%E6%94%AF%E6%8C%81%20--%3E%0A%20%20%20%20%3Cmvc%3Aannotation-driven%20%2F%3E%0A%20%20%20%20%0A%20%20%20%20%3C!--%20%E8%A7%86%E5%9B%BE%E8%A7%A3%E9%87%8A%E7%B1%BB%20--%3E%0A%20%20%20%20%3Cbean%20class%3D%22org.springframework.web.servlet.view.InternalResourceViewResolver%22%3E%0A%20%20%20%20%09%3Cproperty%20name%3D%22prefix%22%20value%3D%22%2FWEB-INF%2Fjsp%2F%22%2F%3E%0A%20%20%20%20%09%3Cproperty%20name%3D%22suffix%22%20value%3D%22.jsp%22%2F%3E%3C!--%E5%8F%AF%E4%B8%BA%E7%A9%BA%2C%E6%96%B9%E4%BE%BF%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%B7%B2%E7%9A%84%E4%BE%9D%E6%8D%AE%E6%89%A9%E5%B1%95%E5%90%8D%E6%9D%A5%E9%80%89%E6%8B%A9%E8%A7%86%E5%9B%BE%E8%A7%A3%E9%87%8A%E7%B1%BB%E7%9A%84%E9%80%BB%E8%BE%91%20%20--%3E%0A%20%20%20%20%09%3Cproperty%20name%3D%22viewClass%22%20value%3D%22org.springframework.web.servlet.view.JstlView%22%20%2F%3E%0A%20%20%20%20%3C%2Fbean%3E%0A%20%20%20%20%0A%09%3C!--%20%E6%8B%A6%E6%88%AA%E5%99%A8%20--%3E%0A%20%20%20%20%3Cmvc%3Ainterceptors%3E%0A%09%09%3Cbean%20class%3D%22com.core.mvc.MyInteceptor%22%20%2F%3E%0A%09%3C%2Fmvc%3Ainterceptors%3E%09%20%20%0A%09%0A%20%09%3C!--%20%E5%AF%B9%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%AE%BF%E9%97%AE%20%20%E6%96%B9%E6%A1%88%E4%B8%80%20%EF%BC%88%E4%BA%8C%E9%80%89%E4%B8%80%EF%BC%89%20--%3E%0A%20%09%3Cmvc%3Adefault-servlet-handler%2F%3E%0A%20%09%0A%20%09%3C!--%20%E5%AF%B9%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%AE%BF%E9%97%AE%20%20%E6%96%B9%E6%A1%88%E4%BA%8C%20%EF%BC%88%E4%BA%8C%E9%80%89%E4%B8%80%EF%BC%89--%3E%0A%09%3Cmvc%3Aresources%20mapping%3D%22%2Fimages%2F**%22%20location%3D%22%2Fimages%2F%22%20cache-period%3D%2231556926%22%2F%3E%0A%09%3Cmvc%3Aresources%20mapping%3D%22%2Fjs%2F**%22%20location%3D%22%2Fjs%2F%22%20cache-period%3D%2231556926%22%2F%3E%0A%09%3Cmvc%3Aresources%20mapping%3D%22%2Fcss%2F**%22%20location%3D%22%2Fcss%2F%22%20cache-period%3D%2231556926%22%2F%3E%0A%0A%3C%2Fbeans%3E%20%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;?</span><span class="tag-name">xml</span><span>&nbsp;</span><span class="attribute">version</span><span>=</span><span class="attribute-value">"1.0"</span><span>&nbsp;</span><span class="attribute">encoding</span><span>=</span><span class="attribute-value">"UTF-8"</span><span class="tag">?&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">beans</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">xmlns</span><span>=</span><span class="attribute-value">"http://www.springframework.org/schema/beans"</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">xmlns:xsi</span><span>=</span><span class="attribute-value">"http://www.w3.org/2001/XMLSchema-instance"</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">xmlns:tx</span><span>=</span><span class="attribute-value">"http://www.springframework.org/schema/tx"</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">xmlns:context</span><span>=</span><span class="attribute-value">"http://www.springframework.org/schema/context"</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">xmlns:mvc</span><span>=</span><span class="attribute-value">"http://www.springframework.org/schema/mvc"</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">xsi:schemaLocation</span><span>="http://www.springframework.org/schema/beans&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/beans/spring-beans-3.0.xsd&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/tx&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/tx/spring-tx-3.0.xsd&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/context&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/context/spring-context-3.0.xsd&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/mvc&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"<span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;自动扫描的包名&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">context:component-scan</span><span>&nbsp;</span><span class="attribute">base-package</span><span>=</span><span class="attribute-value">"com.app,com.core,JUnit4"</span><span>&nbsp;</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">context:component-scan</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;默认的注解映射的支持&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:annotation-driven</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;视图解释类&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"prefix"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"/WEB-INF/jsp/"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"suffix"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">".jsp"</span><span class="tag">/&gt;</span><span class="comments">&lt;!--可为空,方便实现自已的依据扩展名来选择视图解释类的逻辑&nbsp;&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"viewClass"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.JstlView"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;拦截器&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:interceptors</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"com.core.mvc.MyInteceptor"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">mvc:interceptors</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;对静态资源文件的访问&nbsp;&nbsp;方案一&nbsp;（二选一）&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:default-servlet-handler</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;对静态资源文件的访问&nbsp;&nbsp;方案二&nbsp;（二选一）--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:resources</span><span>&nbsp;</span><span class="attribute">mapping</span><span>=</span><span class="attribute-value">"/images/**"</span><span>&nbsp;</span><span class="attribute">location</span><span>=</span><span class="attribute-value">"/images/"</span><span>&nbsp;</span><span class="attribute">cache-period</span><span>=</span><span class="attribute-value">"31556926"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:resources</span><span>&nbsp;</span><span class="attribute">mapping</span><span>=</span><span class="attribute-value">"/js/**"</span><span>&nbsp;</span><span class="attribute">location</span><span>=</span><span class="attribute-value">"/js/"</span><span>&nbsp;</span><span class="attribute">cache-period</span><span>=</span><span class="attribute-value">"31556926"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:resources</span><span>&nbsp;</span><span class="attribute">mapping</span><span>=</span><span class="attribute-value">"/css/**"</span><span>&nbsp;</span><span class="attribute">location</span><span>=</span><span class="attribute-value">"/css/"</span><span>&nbsp;</span><span class="attribute">cache-period</span><span>=</span><span class="attribute-value">"31556926"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">beans</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="3" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"  
+	xmlns:mvc="http://www.springframework.org/schema/mvc"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"&gt;
+
+
+    &lt;!-- 自动扫描的包名 --&gt;
+    &lt;context:component-scan base-package="com.app,com.core,JUnit4" &gt;&lt;/context:component-scan&gt;
+    
+    &lt;!-- 默认的注解映射的支持 --&gt;
+    &lt;mvc:annotation-driven /&gt;
+    
+    &lt;!-- 视图解释类 --&gt;
+    &lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+    	&lt;property name="prefix" value="/WEB-INF/jsp/"/&gt;
+    	&lt;property name="suffix" value=".jsp"/&gt;&lt;!--可为空,方便实现自已的依据扩展名来选择视图解释类的逻辑  --&gt;
+    	&lt;property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /&gt;
+    &lt;/bean&gt;
+    
+	&lt;!-- 拦截器 --&gt;
+    &lt;mvc:interceptors&gt;
+		&lt;bean class="com.core.mvc.MyInteceptor" /&gt;
+	&lt;/mvc:interceptors&gt;	  
+	
+ 	&lt;!-- 对静态资源文件的访问  方案一 （二选一） --&gt;
+ 	&lt;mvc:default-servlet-handler/&gt;
+ 	
+ 	&lt;!-- 对静态资源文件的访问  方案二 （二选一）--&gt;
+	&lt;mvc:resources mapping="/images/**" location="/images/" cache-period="31556926"/&gt;
+	&lt;mvc:resources mapping="/js/**" location="/js/" cache-period="31556926"/&gt;
+	&lt;mvc:resources mapping="/css/**" location="/css/" cache-period="31556926"/&gt;
+
+&lt;/beans&gt; 
+</pre>
+<p>&nbsp;</p>
+<p>&lt;context:component-scan/&gt; 扫描指定的包中的类上的注解，常用的注解有：</p>
+<p>@Controller 声明Action组件<br>
+@Service&nbsp;&nbsp;&nbsp; 声明Service组件&nbsp;&nbsp;&nbsp; @Service("myMovieLister") <br>
+@Repository 声明Dao组件<br>
+@Component&nbsp;&nbsp; 泛指组件, 当不好归类时. <br>
+@RequestMapping("/menu")&nbsp; 请求映射<br>
+@Resource&nbsp; 用于注入，( j2ee提供的 ) 默认按名称装配，@Resource(name="beanName") <br>
+@Autowired 用于注入，(srping提供的) 默认按类型装配 <br>
+@Transactional( rollbackFor={Exception.class}) 事务管理<br>
+@ResponseBody<br>
+@Scope("prototype")&nbsp;&nbsp; 设定bean的作用域</p>
+<p>&nbsp;</p>
+<p>&lt;mvc:annotation-driven /&gt; 是一种简写形式，完全可以手动配置替代这种简写形式，简写形式可以让初学都快速应用默认配置方案。&lt;mvc:annotation-driven /&gt; 会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean,是spring MVC为@Controllers分发请求所必须的。<br>
+并提供了：数据绑定支持，@NumberFormatannotation支持，@DateTimeFormat支持，@Valid支持，读写XML的支持（JAXB），读写JSON的支持（Jackson）。<br>
+后面，我们处理响应ajax请求时，就使用到了对json的支持。<br>
+后面，对action写JUnit单元测试时，要从spring IOC容器中取DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean，来完成测试，取的时候要知道是&lt;mvc:annotation-driven /&gt;这一句注册的这两个bean。</p>
+<p><span style="font-size: small;">如何替换</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;？他到底做了什么工作，请看，最后面的 十九节 </span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt; </span>
+<span style="font-size: small;">到底做了什么工作。</span>
+</p>
+<p>&nbsp;</p>
+<p>&lt;mvc:interceptors/&gt; 是一种简写形式。通过看前面的大图，知道，我们可以配置多个HandlerMapping。&lt;mvc:interceptors/&gt;会为每一个HandlerMapping，注入一个拦截器。其实我们也可以手动配置为每个HandlerMapping注入一个拦截器。</p>
+<p>&nbsp;</p>
+<p>&lt;mvc:default-servlet-handler/&gt; 使用默认的Servlet来响应静态文件。</p>
+<p>&nbsp;</p>
+<p>&lt;mvc:resources mapping="/images/**" location="/images/" cache-period="31556926"/&gt; 匹配URL&nbsp; /images/**&nbsp; 的URL被当做静态资源，由Spring读出到内存中再响应http。
+</p>
+<p>转载请注明出处：本文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p><span style="font-size: small;">&nbsp;<br><strong><span style="font-size: medium;">七、如何访问到静态的文件，如jpg,js,css？</span>
+</strong>
+</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">如何你的DispatcherServlet拦截"*.do"这样的有后缀的URL，就不存在访问不到静态资源的问题。<br><br>
+如果你的DispatcherServlet拦截"/"，为了实现REST风格，拦截了所有的请求，那么同时对*.js,*.jpg等静态文件的访问也就被拦截了。<br><br>
+我们要解决这个问题。 </span>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">目的：可以正常访问静态文件，不可以找不到静态文件报404。</span>
+</p>
+<p><span style="font-size: small;">
+&nbsp;<br>
+方案一：激活Tomcat的defaultServlet来处理静态文件<br></span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cservlet-mapping%3E%20%0A%20%20%20%20%3Cservlet-name%3Edefault%3C%2Fservlet-name%3E%0A%20%20%20%20%3Curl-pattern%3E*.jpg%3C%2Furl-pattern%3E%20%20%20%0A%3C%2Fservlet-mapping%3E%20%20%0A%3Cservlet-mapping%3E%20%20%20%20%20%0A%20%20%20%20%3Cservlet-name%3Edefault%3C%2Fservlet-name%3E%20%20%0A%20%20%20%20%3Curl-pattern%3E*.js%3C%2Furl-pattern%3E%20%20%0A%3C%2Fservlet-mapping%3E%20%20%0A%3Cservlet-mapping%3E%20%20%20%20%20%20%0A%20%20%20%20%3Cservlet-name%3Edefault%3C%2Fservlet-name%3E%20%20%20%20%20%0A%20%20%20%20%3Curl-pattern%3E*.css%3C%2Furl-pattern%3E%20%20%20%20%0A%3C%2Fservlet-mapping%3E%20%20%0A%E8%A6%81%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA%EF%BC%8C%E6%AF%8F%E7%A7%8D%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE%E4%B8%80%E4%B8%AA%20%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>default</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>*.jpg</span><span class="tag">&lt;/</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>default</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>*.js</span><span class="tag">&lt;/</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>default</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>*.css</span><span class="tag">&lt;/</span><span class="tag-name">url-pattern</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">servlet-mapping</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>要配置多个，每种文件配置一个&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="4" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;servlet-mapping&gt; 
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.jpg&lt;/url-pattern&gt;   
+&lt;/servlet-mapping&gt;  
+&lt;servlet-mapping&gt;     
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;  
+    &lt;url-pattern&gt;*.js&lt;/url-pattern&gt;  
+&lt;/servlet-mapping&gt;  
+&lt;servlet-mapping&gt;      
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;     
+    &lt;url-pattern&gt;*.css&lt;/url-pattern&gt;    
+&lt;/servlet-mapping&gt;  
+要配置多个，每种文件配置一个 
+</pre>
+<p><span style="font-size: small;">要写在DispatcherServlet的前面， 让</span>
+<span style="font-size: small;">defaultServlet先拦截请求，这样请求就不会进入Spring了，我想性能是最好的吧。</span>
+</p>
+<p><span style="font-size: small;"><br></span>
+</p>
+<p><span style="color: #ff0000;"><span style="font-size: small;">Tomcat, Jetty, JBoss, and GlassFish 自带的默认Servlet的名字 -- "default"<br>
+Google App Engine </span>
+<span style="font-size: small;">自带的</span>
+<span style="font-size: small;">默认Servlet的名字 -- "_ah_default"<br>
+Resin </span>
+<span style="font-size: small;">自带的</span>
+<span style="font-size: small;">默认Servlet的名字 -- "resin-file"<br>
+WebLogic</span>
+<span style="font-size: small;">自带的</span>
+<span style="font-size: small;"> 默认Servlet的名字&nbsp; -- "FileServlet"<br>
+WebSphere&nbsp; </span>
+<span style="font-size: small;">自带的</span>
+<span style="font-size: small;">默认Servlet的名字 -- "SimpleFileServlet"&nbsp; </span>
+</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><br><span style="font-size: small;">方案二： 在spring3.0.4以后版本提供了mvc:resources ， &nbsp;使用方法：<br></span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3C!--%20%E5%AF%B9%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E7%9A%84%E8%AE%BF%E9%97%AE%20--%3E%20%20%0A%3Cmvc%3Aresources%20mapping%3D%22%2Fimages%2F**%22%20location%3D%22%2Fimages%2F%22%20%2F%3E%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="comments">&lt;!--&nbsp;对静态资源文件的访问&nbsp;--&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">mvc:resources</span><span>&nbsp;</span><span class="attribute">mapping</span><span>=</span><span class="attribute-value">"/images/**"</span><span>&nbsp;</span><span class="attribute">location</span><span>=</span><span class="attribute-value">"/images/"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="5" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;!-- 对静态资源文件的访问 --&gt;  
+&lt;mvc:resources mapping="/images/**" location="/images/" /&gt;
+</pre>
+<p>&nbsp;&nbsp;<br><span style="font-size: small;">/images/**映射到ResourceHttpRequestHandler进行处理，location指定静态资源的位置.可以是web application根目录下、jar包里面，这样可以把静态资源压缩到jar包中。cache-period 可以使得静态资源进行web cache&nbsp;<br>
+&nbsp;<br>
+如果出现下面的错误，可能是没有配置&lt;mvc:annotation-driven /&gt;的原因。 <br>
+报错WARNING: No mapping found for HTTP request with URI [/mvc/user/findUser/lisi/770] in DispatcherServlet with name 'springMVC'<br></span>
+</p>
+<p><span style="font-size: small;">&nbsp;</span>
+</p>
+<p><span style="font-size: small;">使用&lt;mvc:resources/&gt;元素,把mapping的URI注册到SimpleUrlHandlerMapping的urlMap中,<br>
+key为mapping的URI pattern值,而value为ResourceHttpRequestHandler,<br>
+这样就巧妙的把对静态资源的访问由HandlerMapping转到ResourceHttpRequestHandler处理并返回,所以就支持classpath目录,jar包内静态资源的访问.<br>
+另外需要注意的一点是,不要对SimpleUrlHandlerMapping设置defaultHandler.因为对static uri的defaultHandler就是ResourceHttpRequestHandler,<br>
+否则无法处理static resources request.</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>方案三 ，使用&lt;mvc:default-servlet-handler/&gt;</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cmvc%3Adefault-servlet-handler%2F%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">mvc:default-servlet-handler</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="6" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;mvc:default-servlet-handler/&gt;</pre>
+<p><span style="font-size: small;">
+</span>
+</p>
+<p>会把"/**" url,注册到SimpleUrlHandlerMapping的urlMap中,把对静态资源的访问由HandlerMapping转到org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler处理并返回.<br>
+DefaultServletHttpRequestHandler使用就是各个Servlet容器自己的默认Servlet.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>补充说明：多个HandlerMapping的执行顺序问题：</p>
+<p>DefaultAnnotationHandlerMapping的order属性值是：0<br><br>
+&lt;<span style="font-size: small;">mvc:resources/</span>
+&gt;<span style="font-size: small;"><span><span style="font-size: small;">自动注册的</span>
+</span>
+</span>
+SimpleUrlHandlerMapping<span style="font-size: small;"><span><span style="font-size: small;">的order属性值是：</span>
+</span>
+</span>
+2147483646</p>
+<p>&nbsp;</p>
+<p><span><span style="font-size: small;">&lt;mvc:default-servlet-handler/&gt;自动注册</span>
+</span>
+<span><span style="font-size: small;">的SimpleUrlHandlerMapping</span>
+</span>
+<span><span style="font-size: small;">的order属性值是：</span>
+</span>
+<span><span style="font-size: small;">2147483647</span>
+</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>spring会先执行order值比较小的。当访问一个a.jpg图片文件时，先通过 DefaultAnnotationHandlerMapping 来找处理器，一定是找不到的，因为我们没有叫a.jpg的Action。然后再按order值升序找，由于最后一个 SimpleUrlHandlerMapping 是匹配 "/**"的，所以一定会匹配上，就可以响应图片。</p>
+<div><br></div>
+<p>&nbsp;</p>
+<p><em>访问一个图片，还要走层层匹配。不知性能如何？</em>
+</p>
+<p>最后再说明一下，方案二、方案三 在访问静态资源时，如果有匹配的(近似)总拦截器，就会走拦截器。如果你在拦截中实现权限检查，要注意过滤这些对静态文件的请求。</p>
+<p>如何你的DispatcherServlet拦截 *.do这样的URL后缀，就不存上述问题了。还是有后缀方便。</p>
+<p>&nbsp;</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p><br><strong><span style="font-size: medium;">八、请求如何映射到具体的Action中的方法？<br></span>
+</strong>
+方案一：基于xml配置映射，可以利用SimpleUrlHandlerMapping、BeanNameUrlHandlerMapping进行Url映射和拦截请求。<br>
+配置方法略。<br>
+&nbsp;<br><span style="font-size: small;">方案二：基于注解映射，可以使用DefaultAnnotationHandlerMapping。</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cbean%20class%3D%22org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping%22%3E%26nbsp%3B%20%3C%2Fbean%3E%20" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="7" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"&gt;&nbsp; &lt;/bean&gt; </pre>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">但前面我们配置了&lt;mvc:annotation-driven /&gt;，他会自动注册这个bean,就不须要我们显示的注册这个bean了。&nbsp;&nbsp;</span>
+</p>
+<p><span style="font-size: small;">如何替换</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;？他到底做了什么工作，请看，最后面的 十九节 </span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt; </span>
+<span style="font-size: small;">到底做了什么工作。</span>
+</p>
+<p><span style="font-size: small;"><br></span>
+</p>
+<p><span style="font-size: small;">&nbsp;<br>
+以上都可以注入interceptors，实现权限控制等前置工作。<br>
+我们使用第2种，基于注解来使用spring MVC</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;<span style="font-size: small;">并在action类上使用：<br>
+@Controller<br>
+@RequestMapping("/user")</span>
+</p>
+<p><span style="font-size: small;"><span style="font-size: 12px;">转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</span>
+<br>
+&nbsp;<br>
+&nbsp;<br><strong><span style="font-size: medium;">九、Spring中的拦截器：<br></span>
+</strong>
+Spring为我们提供了：<br>
+org.springframework.web.servlet.HandlerInterceptor接口，</span>
+</p>
+<p><span style="font-size: small;">org.springframework.web.servlet.handler.HandlerInterceptorAdapter适配器，<br>
+实现这个接口或继承此类，可以非常方便的实现自己的拦截器。<br>
+&nbsp;<br>
+有以下三个方法：<br>
+&nbsp;<br>
+Action之前执行:<br>
+&nbsp;public boolean preHandle(HttpServletRequest request,<br>
+&nbsp;&nbsp; HttpServletResponse response, Object handler);<br>
+&nbsp;<br>
+生成视图之前执行<br>
+&nbsp;public void postHandle(HttpServletRequest request,<br>
+&nbsp;&nbsp; HttpServletResponse response, Object handler,<br>
+&nbsp;&nbsp; ModelAndView modelAndView);<br>
+&nbsp;<br>
+最后执行，可用于释放资源<br>
+&nbsp;public void afterCompletion(HttpServletRequest request,<br>
+&nbsp;&nbsp; HttpServletResponse response, Object handler, Exception ex)<br>
+&nbsp;<br>
+&nbsp;<br>
+分别实现预处理、后处理（调用了Service并返回ModelAndView，但未进行页面渲染）、返回处理（已经渲染了页面） <br>
+在preHandle中，可以进行编码、安全控制等处理； <br>
+在postHandle中，有机会修改ModelAndView； <br>
+在afterCompletion中，可以根据ex是否为null判断是否发生了异常，进行日志记录。 <br>
+参数中的Object handler是下一个拦截器。<br><span style="font-size: 12px;">转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</span>
+</span>
+</p>
+<p><span style="font-size: small;"><br><strong><span style="font-size: medium;">十、如何使用拦截器？<br></span>
+</strong>
+自定义一个拦截器，要实现HandlerInterceptor接口：<br></span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=public%20class%20MyInteceptor%20implements%20HandlerInterceptor%20%7B%20%20%20%0A%20%20%20%20%E7%95%A5%E3%80%82%E3%80%82%E3%80%82%0A%7D%20%20" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;MyInteceptor&nbsp;</span><span class="keyword">implements</span><span>&nbsp;HandlerInterceptor&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;略。。。&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="8" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">public class MyInteceptor implements HandlerInterceptor {   
+    略。。。
+}  </pre>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">Spring MVC并没有总的拦截器，不能对所有的请求进行前后拦截。<br>
+Spring MVC的拦截器，是属于HandlerMapping级别的，可以有多个HandlerMapping ，每个HandlerMapping可以有自己的拦截器。<br>
+当一个请求按Order值从小到大，顺序执行HandlerMapping接口的实现类时，哪一个先有返回，那就可以结束了，后面的HandlerMapping就不走了，本道工序就完成了。就转到下一道工序了。<br>
+拦截器会在什么时候执行呢？ 一个请求交给一个HandlerMapping时，这个HandlerMapping先找有没有处理器来处理这个请求，如何找到了，就执行拦截器，执行完拦截后，交给目标处理器。<br>
+如果没有找到处理器，那么这个拦截器就不会被执行。</span>
+</p>
+<p>&nbsp;</p>
+<p><br><span style="font-size: small;">在spring MVC的配置文件中配置有三种方法：</span>
+</p>
+<p><br><span style="font-size: small;">方案一，（近似）总拦截器，拦截所有url</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%20%20%20%20%3Cmvc%3Ainterceptors%3E%0A%09%09%3Cbean%20class%3D%22com.app.mvc.MyInteceptor%22%20%2F%3E%0A%09%3C%2Fmvc%3Ainterceptors%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span>&nbsp;&nbsp;&nbsp;&lt;mvc:interceptors&gt;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;bean&nbsp;<span class="keyword">class</span><span>=</span><span class="string">"com.app.mvc.MyInteceptor"</span><span>&nbsp;/&gt;&nbsp;&nbsp;</span></span></li><li><span>&lt;/mvc:interceptors&gt;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="9" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">    &lt;mvc:interceptors&gt;
+		&lt;bean class="com.app.mvc.MyInteceptor" /&gt;
+	&lt;/mvc:interceptors&gt;</pre>
+<p><span style="font-size: small;">为什么叫“近似”，前面说了，Spring没有总的拦截器。</span>
+</p>
+<p><span style="font-size: small;">&lt;mvc:interceptors/&gt;会为每一个HandlerMapping，注入一个拦截器。总有一个HandlerMapping是可以找到处理器的，最多也只找到一个处理器，所以这个拦截器总会被执行的。起到了总拦截器的作用。</span>
+</p>
+<p>如果是REST风格的URL，静态资源也会被拦截。</p>
+<p>&nbsp;</p>
+<p>&nbsp;<br><span style="font-size: small;">方案二，</span>
+<span style="font-size: small;">（近似）</span>
+<span style="font-size: small;">总拦截器，</span>
+<span style="font-size: small;">拦截匹配的URL。</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cmvc%3Ainterceptors%20%3E%20%20%0A%20%20%3Cmvc%3Ainterceptor%3E%20%20%0A%20%20%20%20%20%20%20%20%3Cmvc%3Amapping%20path%3D%22%2Fuser%2F*%22%20%2F%3E%20%3C!--%20%2Fuser%2F*%20%20--%3E%20%20%0A%20%20%20%20%20%20%20%20%3Cbean%20class%3D%22com.mvc.MyInteceptor%22%3E%3C%2Fbean%3E%20%20%0A%20%20%20%20%3C%2Fmvc%3Ainterceptor%3E%20%20%0A%3C%2Fmvc%3Ainterceptors%3E%20%20%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">mvc:interceptors</span><span>&nbsp;</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:interceptor</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mvc:mapping</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"/user/*"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;</span><span class="comments">&lt;!--&nbsp;/user/*&nbsp;&nbsp;--&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"com.mvc.MyInteceptor"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">mvc:interceptor</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">mvc:interceptors</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="10" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;mvc:interceptors &gt;  
+  &lt;mvc:interceptor&gt;  
+        &lt;mvc:mapping path="/user/*" /&gt; &lt;!-- /user/*  --&gt;  
+        &lt;bean class="com.mvc.MyInteceptor"&gt;&lt;/bean&gt;  
+    &lt;/mvc:interceptor&gt;  
+&lt;/mvc:interceptors&gt;  
+</pre>
+<p><span style="font-size: small;">就是比</span>
+<span style="font-size: small;">方案一多了一个URL匹配。</span>
+</p>
+<p>如果是REST风格的URL，静态资源也会被拦截。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">方案三,HandlerMappint上的拦截器。</span>
+</p>
+<p>如果是REST风格的URL，静态资源就不会被拦截。因为我们精准的注入了拦截器。</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cbean%20class%3D%22org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping%22%3E%20%20%20%20%20%0A%20%3Cproperty%20name%3D%22interceptors%22%3E%20%20%20%20%20%0A%20%20%20%20%20%3Clist%3E%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%3Cbean%20class%3D%22com.mvc.MyInteceptor%22%3E%3C%2Fbean%3E%20%20%20%20%0A%20%20%20%20%20%3C%2Flist%3E%20%20%20%20%20%0A%20%3C%2Fproperty%3E%20%20%20%20%20%0A%3C%2Fbean%3E%20" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"interceptors"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">list</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"com.mvc.MyInteceptor"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">list</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="11" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"&gt;     
+ &lt;property name="interceptors"&gt;     
+     &lt;list&gt;     
+         &lt;bean class="com.mvc.MyInteceptor"&gt;&lt;/bean&gt;    
+     &lt;/list&gt;     
+ &lt;/property&gt;     
+&lt;/bean&gt; </pre>
+<p><span style="font-size: small;">&nbsp;</span>
+<span style="font-size: small;">如果使用了&lt;mvc:annotation-driven /&gt;，&nbsp;它会自动注册DefaultAnnotationHandlerMapping 与AnnotationMethodHandlerAdapter 这两个bean,所以就没有机会再给它注入interceptors属性，就无法指定拦截器。</span>
+</p>
+<p><span style="font-size: small;">当然我们可以通过人工配置上面的两个Bean，不使用</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;，就可以</span>
+<span style="font-size: small;">给interceptors属性</span>
+<span style="font-size: small;">注入拦截器了。</span>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">其实我也不建议使用</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;，而建议手动写详细的配置文件，来替代</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;，这就控制力就强了。</span>
+</p>
+<p><span style="font-size: small;">如何替换</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;？他到底做了什么工作，请看，最后面的 十九节 </span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt; </span>
+<span style="font-size: small;">到底做了什么工作。</span>
+</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">十一、如何实现全局的异常处理？</span>
+</strong>
+</p>
+<p><span style="font-size: small;">在spring MVC的配置文件中：</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%09%3C!--%20%E6%80%BB%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86--%3E%0A%09%3Cbean%20id%3D%22exceptionResolver%22%20class%3D%22org.springframework.web.servlet.handler.SimpleMappingExceptionResolver%22%3E%0A%09%09%3Cproperty%20name%3D%22defaultErrorView%22%3E%20%20%0A%09%09%20%09%3Cvalue%3E%2Ferror%2Ferror%3C%2Fvalue%3E%0A%09%09%3C%2Fproperty%3E%0A%09%09%3Cproperty%20name%3D%22defaultStatusCode%22%3E%20%20%0A%09%09%20%09%3Cvalue%3E500%3C%2Fvalue%3E%0A%09%09%3C%2Fproperty%3E%09%0A%09%3Cproperty%20name%3D%22warnLogCategory%22%3E%20%20%0A%09%09%20%09%3Cvalue%3Eorg.springframework.web.servlet.handler.SimpleMappingExceptionResolver%3C%2Fvalue%3E%0A%09%09%3C%2Fproperty%3E%09%0A%09%3C%2Fbean%3E%20" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="comments">&lt;!--&nbsp;总错误处理--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"exceptionResolver"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"defaultErrorView"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">value</span><span class="tag">&gt;</span><span>/error/error</span><span class="tag">&lt;/</span><span class="tag-name">value</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"defaultStatusCode"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">value</span><span class="tag">&gt;</span><span>500</span><span class="tag">&lt;/</span><span class="tag-name">value</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"warnLogCategory"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">value</span><span class="tag">&gt;</span><span>org.springframework.web.servlet.handler.SimpleMappingExceptionResolver</span><span class="tag">&lt;/</span><span class="tag-name">value</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="12" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">	&lt;!-- 总错误处理--&gt;
+	&lt;bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"&gt;
+		&lt;property name="defaultErrorView"&gt;  
+		 	&lt;value&gt;/error/error&lt;/value&gt;
+		&lt;/property&gt;
+		&lt;property name="defaultStatusCode"&gt;  
+		 	&lt;value&gt;500&lt;/value&gt;
+		&lt;/property&gt;	
+	&lt;property name="warnLogCategory"&gt;  
+		 	&lt;value&gt;org.springframework.web.servlet.handler.SimpleMappingExceptionResolver&lt;/value&gt;
+		&lt;/property&gt;	
+	&lt;/bean&gt; </pre>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">这里主要的类是SimpleMappingExceptionResolver类，和他的父类AbstractHandlerExceptionResolver类。</span>
+</p>
+<p><span style="font-size: small;">具体可以配置哪些属性，我是通过查看源码知道的。</span>
+</p>
+<p><span style="font-size: small;">你也可以实现HandlerExceptionResolver接口，写一个自己的异常处理程序。spring的扩展性是很好的。</span>
+</p>
+<p><span style="font-size: small;">&nbsp;</span>
+</p>
+<p><span style="font-size: small;">&nbsp;</span>
+</p>
+<p><span style="font-size: small;">通过SimpleMappingExceptionResolver我们可以将不同的异常映射到不同的jsp页面（通过exceptionMappings属性的配置）。</span>
+</p>
+<p><span style="font-size: small;">&nbsp;</span>
+</p>
+<p><span style="font-size: small;">同时我们也可以为所有的异常指定一个默认的异常提示页面（通过defaultErrorView属性的配置），如果所抛出的异常在exceptionMappings中没有对应的映射，则Spring将用此默认配置显示异常信息。</span>
+</p>
+<p><span style="font-size: small;">注意这里配置的异常显示界面均仅包括主文件名，至于文件路径和后缀已经在viewResolver中指定。如/error/error表示/error/error.jsp</span>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">&nbsp;</span>
+</p>
+<p><span style="font-size: small;">显示错误的jsp页面：</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Html代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3C%25%40%20page%20language%3D%22java%22%20contentType%3D%22text%2Fhtml%3B%20charset%3DGBK%22%0A%20%20%20%20pageEncoding%3D%22GBK%22%25%3E%0A%3C%25%40%20page%20import%3D%22java.lang.Exception%22%25%3E%0A%3C!DOCTYPE%20html%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20HTML%204.01%20Transitional%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FTR%2Fhtml4%2Floose.dtd%22%3E%0A%3Chtml%3E%0A%3Chead%3E%0A%3Cmeta%20http-equiv%3D%22Content-Type%22%20content%3D%22text%2Fhtml%3B%20charset%3DGBK%22%3E%0A%3Ctitle%3E%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2%3C%2Ftitle%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%3Ch1%3E%E5%87%BA%E9%94%99%E4%BA%86%3C%2Fh1%3E%0A%3C%25%0AException%20e%20%3D%20(Exception)request.getAttribute(%22exception%22)%3B%0Aout.print(e.getMessage())%3B%0A%25%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span>%@&nbsp;page&nbsp;</span><span class="attribute">language</span><span>=</span><span class="attribute-value">"java"</span><span>&nbsp;</span><span class="attribute">contentType</span><span>=</span><span class="attribute-value">"text/html;&nbsp;charset=GBK"</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="attribute">pageEncoding</span><span>=</span><span class="attribute-value">"GBK"</span><span>%</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span>%@&nbsp;page&nbsp;</span><span class="attribute">import</span><span>=</span><span class="attribute-value">"java.lang.Exception"</span><span>%</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&lt;!DOCTYPE&nbsp;html&nbsp;PUBLIC&nbsp;"-//W3C//DTD&nbsp;HTML&nbsp;4.01&nbsp;Transitional//EN"&nbsp;"http://www.w3.org/TR/html4/loose.dtd"<span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">html</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">head</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">meta</span><span>&nbsp;</span><span class="attribute">http-equiv</span><span>=</span><span class="attribute-value">"Content-Type"</span><span>&nbsp;</span><span class="attribute">content</span><span>=</span><span class="attribute-value">"text/html;&nbsp;charset=GBK"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">title</span><span class="tag">&gt;</span><span>错误页面</span><span class="tag">&lt;/</span><span class="tag-name">title</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">head</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">body</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">h1</span><span class="tag">&gt;</span><span>出错了</span><span class="tag">&lt;/</span><span class="tag-name">h1</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span>%&nbsp;&nbsp;</span></span></li><li><span>Exception&nbsp;<span class="attribute">e</span><span>&nbsp;=&nbsp;(Exception)request.getAttribute("exception");&nbsp;&nbsp;</span></span></li><li><span>out.print(e.getMessage());&nbsp;&nbsp;</span></li><li><span>%<span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">body</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">html</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="html" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="13" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;%@ page language="java" contentType="text/html; charset=GBK"
+    pageEncoding="GBK"%&gt;
+&lt;%@ page import="java.lang.Exception"%&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=GBK"&gt;
+&lt;title&gt;错误页面&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;出错了&lt;/h1&gt;
+&lt;%
+Exception e = (Exception)request.getAttribute("exception");
+out.print(e.getMessage());
+%&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<p><span style="font-size: small;">其中一句：request.getAttribute("exception")，key是exception，也是在SimpleMappingExceptionResolver类默认指定的，是可能通过配置文件修改这个值的，大家可以去看源码。</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">十二、如何把全局异常记录到日志中？</span>
+</strong>
+</p>
+<p><span style="font-size: small;">在前的配置中，其中有一个属性warnLogCategory，值是“SimpleMappingExceptionResolver类的全限定名”。我是在SimpleMappingExceptionResolver类父类AbstractHandlerExceptionResolver类中找到这个属性的。查看源码后得知：如果warnLogCategory不为空，spring就会使用apache的org.apache.commons.logging.Log日志工具，记录这个异常，级别是warn。</span>
+</p>
+<p><span style="font-size: small;">值：“org.springframework.web.servlet.handler.SimpleMappingExceptionResolver”，是“SimpleMappingExceptionResolver类的全限定名”。这个值不是随便写的。</span>
+<span style="font-size: small;">&nbsp;因为我在log4j的配置文件中还要加入log4j.logger.org.springframework.web.servlet.handler.SimpleMappingExceptionResolver=WARN，保证这个级别是warn的日志一定会被记录，即使log4j的根日志级别是ERROR。</span>
+</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;<strong><span style="font-size: medium;">十三、如何给spring3 MVC中的Action做JUnit单元测试？</span>
+</strong>
+</p>
+<p><span style="font-size: small;">&nbsp;使用了spring3 MVC后，给action做单元测试变得很方便，我以前从来不给action写单元测试的，现在可以根据情况写一些了。</span>
+</p>
+<p>&nbsp;不用给每个Action都写单元测试吧，自己把握吧。</p>
+<p><span style="font-size: small;">&nbsp;</span>
+</p>
+<p><span style="font-size: small;">&nbsp;JUnitActionBase类是所有JUnit的测试类的父类</span>
+</p>
+<p><span style="font-size: small;">
+</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=package%20test%3B%0Aimport%20javax.servlet.http.HttpServletRequest%3B%0Aimport%20javax.servlet.http.HttpServletResponse%3B%0Aimport%20org.junit.BeforeClass%3B%0Aimport%20org.springframework.mock.web.MockServletContext%3B%0Aimport%20org.springframework.web.context.WebApplicationContext%3B%0Aimport%20org.springframework.web.context.support.XmlWebApplicationContext%3B%0Aimport%20org.springframework.web.servlet.HandlerAdapter%3B%0Aimport%20org.springframework.web.servlet.HandlerExecutionChain%3B%0Aimport%20org.springframework.web.servlet.HandlerMapping%3B%0Aimport%20org.springframework.web.servlet.ModelAndView%3B%0Aimport%20org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter%3B%0Aimport%20org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping%3B%0A%2F**%20%0A*%20%E8%AF%B4%E6%98%8E%EF%BC%9A%20JUnit%E6%B5%8B%E8%AF%95action%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84%E5%9F%BA%E7%B1%BB%0A*%20%0A*%20%40author%20%20%E8%B5%B5%E7%A3%8A%0A*%20%40version%20%E5%88%9B%E5%BB%BA%E6%97%B6%E9%97%B4%EF%BC%9A2011-2-2%20%E4%B8%8B%E5%8D%8810%3A27%3A03%20%20%0A*%2F%20%0Apublic%20class%20JUnitActionBase%20%7B%0A%09private%20static%20HandlerMapping%20handlerMapping%3B%0A%09private%20static%20HandlerAdapter%20handlerAdapter%3B%0A%09%2F**%0A%09%20*%20%E8%AF%BB%E5%8F%96spring3%20MVC%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%0A%09%20*%2F%0A%09%40BeforeClass%0A%26nbsp%3Bpublic%20static%20void%20setUp()%20%7B%0A%09%09if%20(handlerMapping%20%3D%3D%20null)%20%7B%0A%09%09%09String%5B%5D%20configs%20%3D%20%7B%20%22file%3Asrc%2FspringConfig%2FspringMVC.xml%22%20%7D%3B%0A%09%09%09XmlWebApplicationContext%20context%20%3D%20new%20XmlWebApplicationContext()%3B%0A%09%09%09context.setConfigLocations(configs)%3B%0A%09%09%09MockServletContext%20msc%20%3D%20new%20MockServletContext()%3B%0A%09%09%09context.setServletContext(msc)%3B%09%09%09context.refresh()%3B%0A%09%09%09msc.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE%2C%20context)%3B%0A%09%09%09handlerMapping%20%3D%20(HandlerMapping)%20context%0A%09%09%09%09%09.getBean(DefaultAnnotationHandlerMapping.class)%3B%0A%09%09%09handlerAdapter%20%3D%20(HandlerAdapter)%20context.getBean(context.getBeanNamesForType(AnnotationMethodHandlerAdapter.class)%5B0%5D)%3B%20%20%20%0A%09%09%7D%0A%09%7D%0A%0A%09%2F**%0A%09%20*%20%E6%89%A7%E8%A1%8Crequest%E5%AF%B9%E8%B1%A1%E8%AF%B7%E6%B1%82%E7%9A%84action%0A%09%20*%20%0A%09%20*%20%40param%20request%0A%09%20*%20%40param%20response%0A%09%20*%20%40return%0A%09%20*%20%40throws%20Exception%0A%09%20*%2F%0A%09public%20ModelAndView%20excuteAction(HttpServletRequest%20request%2C%20HttpServletResponse%20response)%0A%26nbsp%3Bthrows%20Exception%20%7B%0A%09%09HandlerExecutionChain%20chain%20%3D%20handlerMapping.getHandler(request)%3B%0A%09%09final%20ModelAndView%20model%20%3D%20handlerAdapter.handle(request%2C%20response%2C%0A%09%09%09%09chain.getHandler())%3B%0A%09%09return%20model%3B%0A%09%7D%0A%7D" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="keyword">package</span><span>&nbsp;test;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;javax.servlet.http.HttpServletRequest;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;javax.servlet.http.HttpServletResponse;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.junit.BeforeClass;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.mock.web.MockServletContext;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.context.WebApplicationContext;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.context.support.XmlWebApplicationContext;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.HandlerAdapter;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.HandlerExecutionChain;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.HandlerMapping;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.ModelAndView;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;&nbsp;&nbsp;</span></span></li><li><span><span class="comment">/**&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;说明：&nbsp;JUnit测试action时使用的基类</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;@author&nbsp;&nbsp;赵磊</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;@version&nbsp;创建时间：2011-2-2&nbsp;下午10:27:03&nbsp;&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;JUnitActionBase&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;HandlerMapping&nbsp;handlerMapping;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;HandlerAdapter&nbsp;handlerAdapter;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;读取spring3&nbsp;MVC配置文件</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@BeforeClass</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;setUp()&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(handlerMapping&nbsp;==&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String[]&nbsp;configs&nbsp;=&nbsp;{&nbsp;<span class="string">"file:src/springConfig/springMVC.xml"</span><span>&nbsp;};&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlWebApplicationContext&nbsp;context&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;XmlWebApplicationContext();&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.setConfigLocations(configs);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MockServletContext&nbsp;msc&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;MockServletContext();&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.setServletContext(msc);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.refresh();&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msc.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE,&nbsp;context);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handlerMapping&nbsp;=&nbsp;(HandlerMapping)&nbsp;context&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.getBean(DefaultAnnotationHandlerMapping.<span class="keyword">class</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handlerAdapter&nbsp;=&nbsp;(HandlerAdapter)&nbsp;context.getBean(context.getBeanNamesForType(AnnotationMethodHandlerAdapter.<span class="keyword">class</span><span>)[</span><span class="number">0</span><span>]);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;执行request对象请求的action</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;request</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;response</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@throws&nbsp;Exception</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;ModelAndView&nbsp;excuteAction(HttpServletRequest&nbsp;request,&nbsp;HttpServletResponse&nbsp;response)&nbsp;&nbsp;</span></span></li><li><span>&nbsp;<span class="keyword">throws</span><span>&nbsp;Exception&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandlerExecutionChain&nbsp;chain&nbsp;=&nbsp;handlerMapping.getHandler(request);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">final</span><span>&nbsp;ModelAndView&nbsp;model&nbsp;=&nbsp;handlerAdapter.handle(request,&nbsp;response,&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chain.getHandler());&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;model;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="14" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">package test;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.junit.BeforeClass;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.XmlWebApplicationContext;
+import org.springframework.web.servlet.HandlerAdapter;
+import org.springframework.web.servlet.HandlerExecutionChain;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
+import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
+/** 
+* 说明： JUnit测试action时使用的基类
+* 
+* @author  赵磊
+* @version 创建时间：2011-2-2 下午10:27:03  
+*/ 
+public class JUnitActionBase {
+	private static HandlerMapping handlerMapping;
+	private static HandlerAdapter handlerAdapter;
+	/**
+	 * 读取spring3 MVC配置文件
+	 */
+	@BeforeClass
+&nbsp;public static void setUp() {
+		if (handlerMapping == null) {
+			String[] configs = { "file:src/springConfig/springMVC.xml" };
+			XmlWebApplicationContext context = new XmlWebApplicationContext();
+			context.setConfigLocations(configs);
+			MockServletContext msc = new MockServletContext();
+			context.setServletContext(msc);			context.refresh();
+			msc.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);
+			handlerMapping = (HandlerMapping) context
+					.getBean(DefaultAnnotationHandlerMapping.class);
+			handlerAdapter = (HandlerAdapter) context.getBean(context.getBeanNamesForType(AnnotationMethodHandlerAdapter.class)[0]);   
+		}
+	}
+
+	/**
+	 * 执行request对象请求的action
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ModelAndView excuteAction(HttpServletRequest request, HttpServletResponse response)
+&nbsp;throws Exception {
+		HandlerExecutionChain chain = handlerMapping.getHandler(request);
+		final ModelAndView model = handlerAdapter.handle(request, response,
+				chain.getHandler());
+		return model;
+	}
+}</pre>
+<p>
+<span style="font-size: small;">
+</span>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">这是个JUnit测试类，我们可以new Request对象，来参与测试，太方便了。给request指定访问的URL，就可以请求目标Action了。</span>
+</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=package%20test.com.app.user%3B%0Aimport%20org.junit.Assert%3B%0Aimport%20org.junit.Test%3B%0Aimport%20org.springframework.mock.web.MockHttpServletRequest%3B%0Aimport%20org.springframework.mock.web.MockHttpServletResponse%3B%0Aimport%20org.springframework.web.servlet.ModelAndView%3B%0A%0Aimport%20test.JUnitActionBase%3B%0A%0A%2F**%20%0A*%20%E8%AF%B4%E6%98%8E%EF%BC%9A%20%E6%B5%8B%E8%AF%95OrderAction%E7%9A%84%E4%BE%8B%E5%AD%90%0A*%20%0A*%20%40author%20%20%E8%B5%B5%E7%A3%8A%20%0A*%20%40version%20%E5%88%9B%E5%BB%BA%E6%97%B6%E9%97%B4%EF%BC%9A2011-2-2%20%E4%B8%8B%E5%8D%8810%3A26%3A55%20%20%0A*%2F%20%0A%0Apublic%20class%20TestOrderAction%20extends%20JUnitActionBase%20%7B%0A%09%40Test%0A%09public%20void%20testAdd()%20throws%20Exception%20%7B%0A%09MockHttpServletRequest%20request%20%3D%20new%20MockHttpServletRequest()%3B%0A%09%09MockHttpServletResponse%20response%20%3D%20new%20MockHttpServletResponse()%3B%0A%09%09request.setServletPath(%22%2Forder%2Fadd%22)%3B%0A%09%09request.addParameter(%22id%22%2C%20%221002%22)%3B%0A%09%09request.addParameter(%22date%22%2C%20%222010-12-30%22)%3B%0A%09%09request.setMethod(%22POST%22)%3B%0A%09%09%2F%2F%20%E6%89%A7%E8%A1%8CURI%E5%AF%B9%E5%BA%94%E7%9A%84action%0A%09%09final%20ModelAndView%20mav%20%3D%20this.excuteAction(request%2C%20response)%3B%0A%09%09%2F%2F%20Assert%20logic%0A%09%09Assert.assertEquals(%22order%2Fadd%22%2C%20mav.getViewName())%3B%0A%09%09String%20msg%3D(String)request.getAttribute(%22msg%22)%3B%0A%09%09System.out.println(msg)%3B%0A%09%7D%0A%7D" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="keyword">package</span><span>&nbsp;test.com.app.user;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.junit.Assert;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.junit.Test;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.mock.web.MockHttpServletRequest;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.mock.web.MockHttpServletResponse;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.ModelAndView;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="keyword">import</span><span>&nbsp;test.JUnitActionBase;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;说明：&nbsp;测试OrderAction的例子</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;@author&nbsp;&nbsp;赵磊&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;@version&nbsp;创建时间：2011-2-2&nbsp;下午10:26:55&nbsp;&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;TestOrderAction&nbsp;</span><span class="keyword">extends</span><span>&nbsp;JUnitActionBase&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="annotation">@Test</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;testAdd()&nbsp;</span><span class="keyword">throws</span><span>&nbsp;Exception&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;MockHttpServletRequest&nbsp;request&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;MockHttpServletRequest();&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MockHttpServletResponse&nbsp;response&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;MockHttpServletResponse();&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setServletPath(<span class="string">"/order/add"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.addParameter(<span class="string">"id"</span><span>,&nbsp;</span><span class="string">"1002"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.addParameter(<span class="string">"date"</span><span>,&nbsp;</span><span class="string">"2010-12-30"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setMethod(<span class="string">"POST"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;执行URI对应的action</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">final</span><span>&nbsp;ModelAndView&nbsp;mav&nbsp;=&nbsp;</span><span class="keyword">this</span><span>.excuteAction(request,&nbsp;response);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;Assert&nbsp;logic</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.assertEquals(<span class="string">"order/add"</span><span>,&nbsp;mav.getViewName());&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;msg=(String)request.getAttribute(<span class="string">"msg"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(msg);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="15" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">package test.com.app.user;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.servlet.ModelAndView;
+
+import test.JUnitActionBase;
+
+/** 
+* 说明： 测试OrderAction的例子
+* 
+* @author  赵磊 
+* @version 创建时间：2011-2-2 下午10:26:55  
+*/ 
+
+public class TestOrderAction extends JUnitActionBase {
+	@Test
+	public void testAdd() throws Exception {
+	MockHttpServletRequest request = new MockHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		request.setServletPath("/order/add");
+		request.addParameter("id", "1002");
+		request.addParameter("date", "2010-12-30");
+		request.setMethod("POST");
+		// 执行URI对应的action
+		final ModelAndView mav = this.excuteAction(request, response);
+		// Assert logic
+		Assert.assertEquals("order/add", mav.getViewName());
+		String msg=(String)request.getAttribute("msg");
+		System.out.println(msg);
+	}
+}</pre>
+<p><span style="font-size: small;">&nbsp;<strong>需要说明一下</strong>
+ ：由于当前最想版本的Spring(Test) 3.0.5还不支持@ContextConfiguration的注解式context file注入，所以还需要写个setUp处理下，否则类似于Tiles的加载过程会有错误，因为没有ServletContext。3.1的版本应该有更好的解决方案，</span>
+</p>
+<p><span style="font-size: small;">参见：</span>
+<a href="https://jira.springsource.org/browse/SPR-5243"><span style="color: #006699; font-size: small;">https://jira.springsource.org/browse/SPR-5243</span>
+</a>
+<span style="font-size: small;"> 。</span>
+</p>
+<p>参考 ：<a href="http://www.iteye.com/topic/828513">http://www.iteye.com/topic/828513</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;<span style="font-size: medium;"><strong>十四、转发与重定向</strong>
+</span>
+</p>
+<p><span style="font-size: small;">可以通过redirect/forward:url方式转到另一个Action进行连续的处理。</span>
+</p>
+<p><span style="font-size: small;">可以通过redirect:url 防止表单重复提交</span>
+<span style="font-size: small;">。</span>
+</p>
+<p><span style="font-size: small;">写法如下：</span>
+</p>
+<p><span style="font-size: small;">return "forward:/order/add";</span>
+</p>
+<p><span style="font-size: small;">return "redirect:/index.jsp";</span>
+</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: small;">带参数重定向--RedirectAttributes</span>
+</strong>
+</p>
+<p>用户保存或修改后，为了防止用户刷新浏览器(F5)导致表单重复提交，一般在保存或修改操作之后会redirect到一个结果页面（不是forward），同时携带参数，如操作成功的提示信息。因为是Redirect，Request里的attribute不会传递过去。Spring在3.1才提供了这个能力--RedirectAttributes。 反复按F5，操作成功的提示信息也不会再次出来（总共只出现一次），效果很理想。</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=public%20String%20save(%40ModelAttribute(%22group%22)%20Group%20group%2C%20RedirectAttributes%20redirectAttributes)%20%7B%0A%09accountManager.saveGroup(group)%3B%0A%09redirectAttributes.addFlashAttribute(%22message%22%2C%20%22%E6%93%8D%E4%BD%9C%E6%88%90%E5%8A%9F%22)%3B%0A%09return%20%22redirect%3A%2Faccount%2Fgroup%2F%22%3B%0A%7D" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="keyword">public</span><span>&nbsp;String&nbsp;save(</span><span class="annotation">@ModelAttribute</span><span>(</span><span class="string">"group"</span><span>)&nbsp;Group&nbsp;group,&nbsp;RedirectAttributes&nbsp;redirectAttributes)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;accountManager.saveGroup(group);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;redirectAttributes.addFlashAttribute(<span class="string">"message"</span><span>,&nbsp;</span><span class="string">"操作成功"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="string">"redirect:/account/group/"</span><span>;&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="16" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">public String save(@ModelAttribute("group") Group group, RedirectAttributes redirectAttributes) {
+	accountManager.saveGroup(group);
+	redirectAttributes.addFlashAttribute("message", "操作成功");
+	return "redirect:/account/group/";
+}</pre>
+&nbsp;
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><strong>&nbsp;十五、处理ajax请求</strong>
+</span>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">1、引入下面两个jar包，我用的是1.7.2，好像1.4.2版本以上都可以，下载地址：</span>
+<a href="http://wiki.fasterxml.com/JacksonDownload"><span style="font-size: small;">http://wiki.fasterxml.com/JacksonDownload</span>
+</a>
+</p>
+<p><span style="font-size: small;">jackson-core-asl-1.7.2.jar&nbsp;</span>
+</p>
+<p><span style="font-size: small;">jackson-mapper-asl-1.7.2.jar</span>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">2、spring的配置文件中要有这一行，才能使用到spring内置支持的json转换。如果你手工把POJO转成json就可以不须要使用spring内置支持的json转换。</span>
+</p>
+<p><span style="font-size: small;">&lt;mvc:annotation-driven /&gt;</span>
+</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">3、使用@ResponseBody注解</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%09%2F**%0A%09%20*%20ajax%E6%B5%8B%E8%AF%95%0A%09*%20http%3A%2F%2F127.0.0.1%2Fmvc%2Forder%2Fajax%0A%09%20*%2F%0A%0A%09%40RequestMapping(%22%2Fajax%22)%0A%09%40ResponseBody%0A%09public%20Object%20ajax(HttpServletRequest%20request)%7B%0A%09%09List%3CString%3E%20list%3Dnew%20ArrayList%3CString%3E()%3B%0A%09%09list.add(%22%E7%94%B5%E8%A7%86%22)%3B%0A%26nbsp%3B%09%09list.add(%22%E6%B4%97%E8%A1%A3%E6%9C%BA%22)%3B%0A%09%09list.add(%22%E5%86%B0%E7%AE%B1%22)%3B%0A%09%09list.add(%22%E7%94%B5%E8%84%91%22)%3B%0A%09%09list.add(%22%E6%B1%BD%E8%BD%A6%22)%3B%0A%09%09list.add(%22%E7%A9%BA%E8%B0%83%22)%3B%0A%09%09list.add(%22%E8%87%AA%E8%A1%8C%E8%BD%A6%22)%3B%0A%09%09list.add(%22%E9%A5%AE%E6%B0%B4%E6%9C%BA%22)%3B%0A%09%09list.add(%22%E7%83%AD%E6%B0%B4%E5%99%A8%22)%3B%0A%09%09return%20list%3B%0A%09%7D" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;*&nbsp;ajax测试</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;http://127.0.0.1/mvc/order/ajax</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="annotation">@RequestMapping</span><span>(</span><span class="string">"/ajax"</span><span>)&nbsp;&nbsp;</span></span></li><li><span><span class="annotation">@ResponseBody</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;Object&nbsp;ajax(HttpServletRequest&nbsp;request){&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;List&lt;String&gt;&nbsp;list=<span class="keyword">new</span><span>&nbsp;ArrayList&lt;String&gt;();&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"电视"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"洗衣机"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"冰箱"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"电脑"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"汽车"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"空调"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"自行车"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"饮水机"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;list.add(<span class="string">"热水器"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;list;&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="17" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">	/**
+	 * ajax测试
+	* http://127.0.0.1/mvc/order/ajax
+	 */
+
+	@RequestMapping("/ajax")
+	@ResponseBody
+	public Object ajax(HttpServletRequest request){
+		List&lt;String&gt; list=new ArrayList&lt;String&gt;();
+		list.add("电视");
+&nbsp;		list.add("洗衣机");
+		list.add("冰箱");
+		list.add("电脑");
+		list.add("汽车");
+		list.add("空调");
+		list.add("自行车");
+		list.add("饮水机");
+		list.add("热水器");
+		return list;
+	}</pre>
+<p>&nbsp;</p>
+<p>转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><strong>十六、关于写几个配置文件的说明</strong>
+</span>
+<br><br>
+我看到有的人把配置文件写两份：<br>
+一个是原有的applicationContext.xml，这个文件从spring2.0-2.5时一直在使用。<br>
+别一个是新加的spring MVC的配置文件。<br>
+其实这两个文件是可以写成一个文件的，springMVC相关的配置，数据源，事务相关配置可以都写再一个配置文件中。<br>
+本例子中只使用了一个spring配置文件叫“springMVC.xml”。<br>
+就不要再多配置一个applicationContext.xml文件了。<br>
+web.xml文件中也不要再配置org.springframework.web.context.ContextLoaderListener的listener了。<br>
+写两个配置文件一般就会导致扫描两次，一定要精确控制扫描的包名，做到不重复扫描。<br><br>
+写两个配置文件还出现事务不好使的现象，是当把@Transactional写有Action层时出现的。</p>
+<p>是因为父子上下文的原因，请参看前的 第五节 父子上下文，里面有说明 。原因是父上下文不能访问子上下文。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><strong>十七、如何取得Spring管理的bean</strong>
+</span>
+（请用第3种方法）<br>
+1、servlet方式加载时，<br>
+【web.xml】</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Cservlet%3E%0A%3Cservlet-name%3EspringMVC%3C%2Fservlet-name%3E%0A%3Cservlet-class%3Eorg.springframework.web.servlet.DispatcherServlet%3C%2Fservlet-class%3E%0A%3Cinit-param%3E%0A%3Cparam-name%3EcontextConfigLocation%3C%2Fparam-name%3E%0A%3Cparam-value%3Eclasspath*%3A%2FspringMVC.xml%3C%2Fparam-value%3E%0A%3C%2Finit-param%3E%0A%3Cload-on-startup%3E1%3C%2Fload-on-startup%3E%0A%3C%2Fservlet%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">servlet</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>springMVC</span><span class="tag">&lt;/</span><span class="tag-name">servlet-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">servlet-class</span><span class="tag">&gt;</span><span>org.springframework.web.servlet.DispatcherServlet</span><span class="tag">&lt;/</span><span class="tag-name">servlet-class</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">init-param</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">param-name</span><span class="tag">&gt;</span><span>contextConfigLocation</span><span class="tag">&lt;/</span><span class="tag-name">param-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">param-value</span><span class="tag">&gt;</span><span>classpath*:/springMVC.xml</span><span class="tag">&lt;/</span><span class="tag-name">param-value</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">init-param</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">load-on-startup</span><span class="tag">&gt;</span><span>1</span><span class="tag">&lt;/</span><span class="tag-name">load-on-startup</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">servlet</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="18" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;servlet&gt;
+&lt;servlet-name&gt;springMVC&lt;/servlet-name&gt;
+&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+&lt;init-param&gt;
+&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+&lt;param-value&gt;classpath*:/springMVC.xml&lt;/param-value&gt;
+&lt;/init-param&gt;
+&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;</pre>
+<p>&nbsp;spring容器放在ServletContext中的key是org.springframework.web.servlet.FrameworkServlet.CONTEXT.springMVC<br>
+注意后面的springMVC，是你的servlet-name配置的值，注意适时修改。</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=ServletContext%20sc%3D%E7%95%A5%0AWebApplicationContext%20attr%20%3D%20(WebApplicationContext)sc.getAttribute(%22org.springframework.web.servlet.FrameworkServlet.CONTEXT.springMVC%22)%3B%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span>ServletContext&nbsp;sc=略&nbsp;&nbsp;</span></span></li><li><span>WebApplicationContext&nbsp;attr&nbsp;=&nbsp;(WebApplicationContext)sc.getAttribute(<span class="string">"org.springframework.web.servlet.FrameworkServlet.CONTEXT.springMVC"</span><span>);&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="19" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">ServletContext sc=略
+WebApplicationContext attr = (WebApplicationContext)sc.getAttribute("org.springframework.web.servlet.FrameworkServlet.CONTEXT.springMVC");
+</pre>
+&nbsp;
+<p>2、listener方式加载时：<br>
+【web.xml】</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3Ccontext-param%3E%0A%20%20%3Cparam-name%3EcontextConfigLocation%3C%2Fparam-name%3E%0A%20%20%3Cparam-value%3E%2FWEB-INF%2FapplicationContext%3C%2Fparam-value%3E%0A%3C%2Fcontext-param%3E%0A%0A%3Clistener%3E%0A%20%20%3Clistener-class%3Eorg.springframework.web.context.ContextLoaderListener%3C%2Flistener-class%3E%0A%3C%2Flistener%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="tag">&lt;</span><span class="tag-name">context-param</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">param-name</span><span class="tag">&gt;</span><span>contextConfigLocation</span><span class="tag">&lt;/</span><span class="tag-name">param-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">param-value</span><span class="tag">&gt;</span><span>/WEB-INF/applicationContext</span><span class="tag">&lt;/</span><span class="tag-name">param-value</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">context-param</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="tag">&lt;</span><span class="tag-name">listener</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">listener-class</span><span class="tag">&gt;</span><span>org.springframework.web.context.ContextLoaderListener</span><span class="tag">&lt;/</span><span class="tag-name">listener-class</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">listener</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="20" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;context-param&gt;
+  &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+  &lt;param-value&gt;/WEB-INF/applicationContext&lt;/param-value&gt;
+&lt;/context-param&gt;
+
+&lt;listener&gt;
+  &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;
+&lt;/listener&gt;</pre>
+<p>&nbsp;【jsp/servlet】可以这样取得</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=ServletContext%20context%20%3D%20getServletContext()%3B%0AWebApplicationContext%20applicationContext%20%20%3D%20WebApplicationContextUtils%20.getWebApplicationContext(context)%3B%20" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span>ServletContext&nbsp;context&nbsp;=&nbsp;getServletContext();&nbsp;&nbsp;</span></span></li><li><span>WebApplicationContext&nbsp;applicationContext&nbsp;&nbsp;=&nbsp;WebApplicationContextUtils&nbsp;.getWebApplicationContext(context);&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="21" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">ServletContext context = getServletContext();
+WebApplicationContext applicationContext  = WebApplicationContextUtils .getWebApplicationContext(context); </pre>
+&nbsp;
+<p>3、通用的方法来了，神器啊，前的&nbsp; 1、2两种方法并不通用，可以抛弃了。<br>
+在配置文件中加入：</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%3C!--%20%E7%94%A8%E4%BA%8E%E6%8C%81%E6%9C%89ApplicationContext%2C%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8SpringContextHolder.getBean('xxxx')%E7%9A%84%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E5%BE%97%E5%88%B0spring%20bean%E5%AF%B9%E8%B1%A1%20--%3E%0A%3Cbean%20class%3D%22com.xxxxx.SpringContextHolder%22%20lazy-init%3D%22false%22%20%2F%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span class="comments">&lt;!--&nbsp;用于持有ApplicationContext,可以使用SpringContextHolder.getBean('xxxx')的静态方法得到spring&nbsp;bean对象&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"com.xxxxx.SpringContextHolder"</span><span>&nbsp;</span><span class="attribute">lazy-init</span><span>=</span><span class="attribute-value">"false"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="22" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">&lt;!-- 用于持有ApplicationContext,可以使用SpringContextHolder.getBean('xxxx')的静态方法得到spring bean对象 --&gt;
+&lt;bean class="com.xxxxx.SpringContextHolder" lazy-init="false" /&gt;</pre>
+&nbsp;
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=import%20org.springframework.context.ApplicationContext%3B%0Aimport%20org.springframework.context.ApplicationContextAware%3B%0A%2F**%0A%20*%20%E4%BB%A5%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E4%BF%9D%E5%AD%98Spring%20ApplicationContext%2C%20%E5%8F%AF%E5%9C%A8%E4%BB%BB%E4%BD%95%E4%BB%A3%E7%A0%81%E4%BB%BB%E4%BD%95%E5%9C%B0%E6%96%B9%E4%BB%BB%E4%BD%95%E6%97%B6%E5%80%99%E4%B8%AD%E5%8F%96%E5%87%BAApplicaitonContext.%0A%20*%20%0A%20*%2F%0Apublic%20class%20SpringContextHolder%20implements%20ApplicationContextAware%20%7B%0Aprivate%20static%20ApplicationContext%20applicationContext%3B%0A%0A%2F**%0A*%20%E5%AE%9E%E7%8E%B0ApplicationContextAware%E6%8E%A5%E5%8F%A3%E7%9A%84context%E6%B3%A8%E5%85%A5%E5%87%BD%E6%95%B0%2C%20%E5%B0%86%E5%85%B6%E5%AD%98%E5%85%A5%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F.%0A*%2F%0Apublic%20void%20setApplicationContext(ApplicationContext%20applicationContext)%20%7B%0ASpringContextHolder.applicationContext%20%3D%20applicationContext%3B%20%2F%2F%20NOSONAR%0A%7D%0A%0A%2F**%0A*%20%E5%8F%96%E5%BE%97%E5%AD%98%E5%82%A8%E5%9C%A8%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E4%B8%AD%E7%9A%84ApplicationContext.%0A*%2F%0Apublic%20static%20ApplicationContext%20getApplicationContext()%20%7B%0AcheckApplicationContext()%3B%0Areturn%20applicationContext%3B%0A%7D%0A%0A%2F**%0A*%20%E4%BB%8E%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8FApplicationContext%E4%B8%AD%E5%8F%96%E5%BE%97Bean%2C%20%E8%87%AA%E5%8A%A8%E8%BD%AC%E5%9E%8B%E4%B8%BA%E6%89%80%E8%B5%8B%E5%80%BC%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%B1%BB%E5%9E%8B.%0A*%2F%0A%40SuppressWarnings(%22unchecked%22)%0Apublic%20static%20%3CT%3E%20T%20getBean(String%20name)%20%7B%0AcheckApplicationContext()%3B%0Areturn%20(T)%20applicationContext.getBean(name)%3B%0A%7D%0A%0A%2F**%0A*%20%E4%BB%8E%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8FApplicationContext%E4%B8%AD%E5%8F%96%E5%BE%97Bean%2C%20%E8%87%AA%E5%8A%A8%E8%BD%AC%E5%9E%8B%E4%B8%BA%E6%89%80%E8%B5%8B%E5%80%BC%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%B1%BB%E5%9E%8B.%0A*%2F%0A%40SuppressWarnings(%22unchecked%22)%0Apublic%20static%20%3CT%3E%20T%20getBean(Class%3CT%3E%20clazz)%20%7B%0AcheckApplicationContext()%3B%0Areturn%20(T)%20applicationContext.getBeansOfType(clazz)%3B%0A%7D%0A%0A%2F**%0A*%20%E6%B8%85%E9%99%A4applicationContext%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F.%0A*%2F%0Apublic%20static%20void%20cleanApplicationContext()%20%7B%0AapplicationContext%20%3D%20null%3B%0A%7D%0A%0Aprivate%20static%20void%20checkApplicationContext()%20%7B%0Aif%20(applicationContext%20%3D%3D%20null)%20%7B%0Athrow%20new%20IllegalStateException(%22applicaitonContext%E6%9C%AA%E6%B3%A8%E5%85%A5%2C%E8%AF%B7%E5%9C%A8applicationContext.xml%E4%B8%AD%E5%AE%9A%E4%B9%89SpringContextHolder%22)%3B%0A%7D%0A%7D%0A%7D%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.context.ApplicationContext;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.context.ApplicationContextAware;&nbsp;&nbsp;</span></span></li><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;*&nbsp;以静态变量保存Spring&nbsp;ApplicationContext,&nbsp;可在任何代码任何地方任何时候中取出ApplicaitonContext.</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;*&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;SpringContextHolder&nbsp;</span><span class="keyword">implements</span><span>&nbsp;ApplicationContextAware&nbsp;{&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">private</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;ApplicationContext&nbsp;applicationContext;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;实现ApplicationContextAware接口的context注入函数,&nbsp;将其存入静态变量.</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;setApplicationContext(ApplicationContext&nbsp;applicationContext)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>SpringContextHolder.applicationContext&nbsp;=&nbsp;applicationContext;&nbsp;<span class="comment">//&nbsp;NOSONAR</span><span>&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;取得存储在静态变量中的ApplicationContext.</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;ApplicationContext&nbsp;getApplicationContext()&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>checkApplicationContext();&nbsp;&nbsp;</span></li><li><span><span class="keyword">return</span><span>&nbsp;applicationContext;&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;从静态变量ApplicationContext中取得Bean,&nbsp;自动转型为所赋值对象的类型.</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="annotation">@SuppressWarnings</span><span>(</span><span class="string">"unchecked"</span><span>)&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;&lt;T&gt;&nbsp;T&nbsp;getBean(String&nbsp;name)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>checkApplicationContext();&nbsp;&nbsp;</span></li><li><span><span class="keyword">return</span><span>&nbsp;(T)&nbsp;applicationContext.getBean(name);&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;从静态变量ApplicationContext中取得Bean,&nbsp;自动转型为所赋值对象的类型.</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="annotation">@SuppressWarnings</span><span>(</span><span class="string">"unchecked"</span><span>)&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;&lt;T&gt;&nbsp;T&nbsp;getBean(Class&lt;T&gt;&nbsp;clazz)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>checkApplicationContext();&nbsp;&nbsp;</span></li><li><span><span class="keyword">return</span><span>&nbsp;(T)&nbsp;applicationContext.getBeansOfType(clazz);&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;清除applicationContext静态变量.</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;cleanApplicationContext()&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>applicationContext&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="keyword">private</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;checkApplicationContext()&nbsp;{&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">if</span><span>&nbsp;(applicationContext&nbsp;==&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">throw</span><span>&nbsp;</span><span class="keyword">new</span><span>&nbsp;IllegalStateException(</span><span class="string">"applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="23" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+/**
+ * 以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候中取出ApplicaitonContext.
+ * 
+ */
+public class SpringContextHolder implements ApplicationContextAware {
+private static ApplicationContext applicationContext;
+
+/**
+* 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量.
+*/
+public void setApplicationContext(ApplicationContext applicationContext) {
+SpringContextHolder.applicationContext = applicationContext; // NOSONAR
+}
+
+/**
+* 取得存储在静态变量中的ApplicationContext.
+*/
+public static ApplicationContext getApplicationContext() {
+checkApplicationContext();
+return applicationContext;
+}
+
+/**
+* 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
+*/
+@SuppressWarnings("unchecked")
+public static &lt;T&gt; T getBean(String name) {
+checkApplicationContext();
+return (T) applicationContext.getBean(name);
+}
+
+/**
+* 从静态变量ApplicationContext中取得Bean, 自动转型为所赋值对象的类型.
+*/
+@SuppressWarnings("unchecked")
+public static &lt;T&gt; T getBean(Class&lt;T&gt; clazz) {
+checkApplicationContext();
+return (T) applicationContext.getBeansOfType(clazz);
+}
+
+/**
+* 清除applicationContext静态变量.
+*/
+public static void cleanApplicationContext() {
+applicationContext = null;
+}
+
+private static void checkApplicationContext() {
+if (applicationContext == null) {
+throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
+}
+}
+}
+</pre>
+<p>&nbsp;&nbsp;转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><strong>十八、多视图控制器</strong>
+</span>
+</p>
+<p>&nbsp;</p>
+<p>当有jsp,flt (模板)等多种页面生成展示方式时，spring默认使用的是“视图解析器链”。 真是一个链，所以性能不好，spring会在“视图解析器链”中顺序的查找，直到找到对应的 “视图解析器” 。jsp视图解析器一定要写在最后面，因为一旦调用jsp，就向浏览器发出数据了，Spring就没有机会再尝试下一个了。</p>
+<p>所以自己写一个"多视图解析器"，依靠扩展名来区分，可一次准确的选中一个 视图解析器,提高性能（会有多少提高呢？没测试过）.</p>
+<p>&nbsp;</p>
+<p>下面的例子支持jsp,flt (模板)两种页面生成展示方式，你中以自己添加，支持更多。</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%20%20%20%20%3C!--%20%E5%A4%9A%E8%A7%86%E5%9B%BE%E5%A4%84%E7%90%86%E5%99%A8%20--%3E%0A%20%20%20%20%3Cbean%20class%3D%22com.xxx.core.web.MixedViewResolver%22%3E%0A%09%09%3Cproperty%20name%3D%22resolvers%22%3E%0A%09%09%09%3Cmap%3E%0A%09%09%09%09%3Centry%20key%3D%22jsp%22%3E%0A%09%09%09%09%09%3Cbean%20class%3D%22org.springframework.web.servlet.view.InternalResourceViewResolver%22%3E%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22prefix%22%20value%3D%22%2FWEB-INF%2Fjsp%2F%22%2F%3E%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22viewClass%22%20value%3D%22org.springframework.web.servlet.view.JstlView%22%3E%3C%2Fproperty%3E%0A%09%09%09%09%09%3C%2Fbean%3E%0A%09%09%09%09%3C%2Fentry%3E%0A%09%09%09%09%3Centry%20key%3D%22ftl%22%3E%0A%09%09%09%09%09%3Cbean%20class%3D%22org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver%22%3E%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22cache%22%20value%3D%22true%22%2F%3E%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22contentType%22%20value%3D%22text%2Fhtml%3Bcharset%3DUTF-8%22%3E%3C%2Fproperty%3E%0A%09%09%09%09%09%09%3C!--%20%E5%AE%8F%E5%91%BD%E4%BB%A4%E7%9A%84%E6%94%AF%E6%8C%81%20%20--%3E%20%20%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22exposeSpringMacroHelpers%22%20value%3D%22true%22%2F%3E%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22viewClass%22%20value%3D%22org.springframework.web.servlet.view.freemarker.FreeMarkerView%22%2F%3E%0A%09%09%09%09%09%09%3Cproperty%20name%3D%22requestContextAttribute%22%20value%3D%22rc%22%3E%3C%2Fproperty%3E%0A%09%09%09%09%09%3C%2Fbean%3E%0A%09%09%09%09%3C%2Fentry%3E%0A%09%09%09%3C%2Fmap%3E%0A%09%09%3C%2Fproperty%3E%0A%09%3C%2Fbean%3E%0A%09%0A%09%3C!--%20freemarker%20config%20--%3E%0A%20%20%20%20%3Cbean%20id%3D%22freeMarkerConfigurer%22%20class%3D%22org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer%22%3E%20%0A%20%20%20%20%20%20%20%20%3Cproperty%20name%3D%22templateLoaderPath%22%20value%3D%22%2FWEB-INF%2Fftl%2F%22%20%2F%3E%20%0A%20%20%20%20%20%20%20%20%3Cproperty%20name%3D%22freemarkerSettings%22%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cprops%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cprop%20key%3D%22template_update_delay%22%3E5%3C%2Fprop%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cprop%20key%3D%22default_encoding%22%3EUTF-8%3C%2Fprop%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cprop%20key%3D%22locale%22%3Ezh_CN%3C%2Fprop%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fprops%3E%20%0A%20%20%20%20%20%20%20%20%3C%2Fproperty%3E%20%0A%20%20%20%20%3C%2Fbean%3E%20" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span>&nbsp;&nbsp;&nbsp;</span><span class="comments">&lt;!--&nbsp;多视图处理器&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"com.xxx.core.web.MixedViewResolver"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"resolvers"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">map</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">entry</span><span>&nbsp;</span><span class="attribute">key</span><span>=</span><span class="attribute-value">"jsp"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"prefix"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"/WEB-INF/jsp/"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"viewClass"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.JstlView"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">entry</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">entry</span><span>&nbsp;</span><span class="attribute">key</span><span>=</span><span class="attribute-value">"ftl"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"cache"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"true"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"contentType"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"text/html;charset=UTF-8"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comments">&lt;!--&nbsp;宏命令的支持&nbsp;&nbsp;--&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"exposeSpringMacroHelpers"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"true"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"viewClass"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.freemarker.FreeMarkerView"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"requestContextAttribute"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"rc"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">entry</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">map</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comments">&lt;!--&nbsp;freemarker&nbsp;config&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"freeMarkerConfigurer"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"templateLoaderPath"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"/WEB-INF/ftl/"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"freemarkerSettings"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">props</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">prop</span><span>&nbsp;</span><span class="attribute">key</span><span>=</span><span class="attribute-value">"template_update_delay"</span><span class="tag">&gt;</span><span>5</span><span class="tag">&lt;/</span><span class="tag-name">prop</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">prop</span><span>&nbsp;</span><span class="attribute">key</span><span>=</span><span class="attribute-value">"default_encoding"</span><span class="tag">&gt;</span><span>UTF-8</span><span class="tag">&lt;/</span><span class="tag-name">prop</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">prop</span><span>&nbsp;</span><span class="attribute">key</span><span>=</span><span class="attribute-value">"locale"</span><span class="tag">&gt;</span><span>zh_CN</span><span class="tag">&lt;/</span><span class="tag-name">prop</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">props</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="24" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">    &lt;!-- 多视图处理器 --&gt;
+    &lt;bean class="com.xxx.core.web.MixedViewResolver"&gt;
+		&lt;property name="resolvers"&gt;
+			&lt;map&gt;
+				&lt;entry key="jsp"&gt;
+					&lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+						&lt;property name="prefix" value="/WEB-INF/jsp/"/&gt;
+						&lt;property name="viewClass" value="org.springframework.web.servlet.view.JstlView"&gt;&lt;/property&gt;
+					&lt;/bean&gt;
+				&lt;/entry&gt;
+				&lt;entry key="ftl"&gt;
+					&lt;bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"&gt;
+						&lt;property name="cache" value="true"/&gt;
+						&lt;property name="contentType" value="text/html;charset=UTF-8"&gt;&lt;/property&gt;
+						&lt;!-- 宏命令的支持  --&gt;  
+						&lt;property name="exposeSpringMacroHelpers" value="true"/&gt;
+						&lt;property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/&gt;
+						&lt;property name="requestContextAttribute" value="rc"&gt;&lt;/property&gt;
+					&lt;/bean&gt;
+				&lt;/entry&gt;
+			&lt;/map&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
+	
+	&lt;!-- freemarker config --&gt;
+    &lt;bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"&gt; 
+        &lt;property name="templateLoaderPath" value="/WEB-INF/ftl/" /&gt; 
+        &lt;property name="freemarkerSettings"&gt; 
+            &lt;props&gt; 
+                &lt;prop key="template_update_delay"&gt;5&lt;/prop&gt; 
+                &lt;prop key="default_encoding"&gt;UTF-8&lt;/prop&gt; 
+                &lt;prop key="locale"&gt;zh_CN&lt;/prop&gt; 
+            &lt;/props&gt; 
+        &lt;/property&gt; 
+    &lt;/bean&gt; </pre>
+&nbsp;&nbsp;
+<p>&nbsp;</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=import%20java.util.Locale%3B%0Aimport%20java.util.Map%3B%0Aimport%20org.springframework.web.servlet.View%3B%0Aimport%20org.springframework.web.servlet.ViewResolver%3B%0A%0A%2F**%20%0A*%20%E8%AF%B4%E6%98%8E%EF%BC%9A%20%E5%A4%9A%E8%A7%86%E5%9B%BE%E5%A4%84%E7%90%86%E5%99%A8%0A*%20%0A*%20%40author%20%20%E8%B5%B5%E7%A3%8A%20%0A*%20%40version%20%E5%88%9B%E5%BB%BA%E6%97%B6%E9%97%B4%EF%BC%9A2011-8-19%20%E4%B8%8A%E5%8D%8809%3A41%3A09%20%20%0A*%2F%20%0Apublic%20class%20MixedViewResolver%20implements%20ViewResolver%7B%0A%09private%20Map%3CString%2CViewResolver%3E%20resolvers%3B%0A%0A%09public%20void%20setResolvers(Map%3CString%2C%20ViewResolver%3E%20resolvers)%20%7B%0A%09%09this.resolvers%20%3D%20resolvers%3B%0A%09%7D%0A%09%0A%09public%20View%20resolveViewName(String%20viewName%2CLocale%20locale)%20throws%20Exception%7B%0A%09%09int%20n%3DviewName.lastIndexOf(%22.%22)%3B%0A%09%09if(n!%3D-1)%7B%0A%09%09%09%2F%2F%E5%8F%96%E5%87%BA%E6%89%A9%E5%B1%95%E5%90%8D%0A%09%09%09String%20suffix%3DviewName.substring(n%2B1)%3B%0A%09%09%09%2F%2F%E5%8F%96%E5%87%BA%E5%AF%B9%E5%BA%94%E7%9A%84ViewResolver%0A%09%09%09ViewResolver%20resolver%3Dresolvers.get(suffix)%3B%0A%09%09%09if(resolver%3D%3Dnull)%7B%0A%09%09%09%09throw%20new%20RuntimeException(%22No%20ViewResolver%20for%20%22%2Bsuffix)%3B%0A%09%09%09%7D%0A%09%09%09return%20%20resolver.resolveViewName(viewName%2C%20locale)%3B%0A%09%09%7Delse%7B%0A%09%09%09ViewResolver%20resolver%3Dresolvers.get(%22jsp%22)%3B%0A%09%09%09return%20%20resolver.resolveViewName(viewName%2C%20locale)%3B%0A%09%09%7D%0A%09%7D%0A%7D" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span class="keyword">import</span><span>&nbsp;java.util.Locale;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;java.util.Map;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.View;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">import</span><span>&nbsp;org.springframework.web.servlet.ViewResolver;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span><span class="comment">/**&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;说明：&nbsp;多视图处理器</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;@author&nbsp;&nbsp;赵磊&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*&nbsp;@version&nbsp;创建时间：2011-8-19&nbsp;上午09:41:09&nbsp;&nbsp;</span>&nbsp;</span></li><li><span><span class="comment">*/</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;MixedViewResolver&nbsp;</span><span class="keyword">implements</span><span>&nbsp;ViewResolver{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span><span>&nbsp;Map&lt;String,ViewResolver&gt;&nbsp;resolvers;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;setResolvers(Map&lt;String,&nbsp;ViewResolver&gt;&nbsp;resolvers)&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span><span>.resolvers&nbsp;=&nbsp;resolvers;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;View&nbsp;resolveViewName(String&nbsp;viewName,Locale&nbsp;locale)&nbsp;</span><span class="keyword">throws</span><span>&nbsp;Exception{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span><span>&nbsp;n=viewName.lastIndexOf(</span><span class="string">"."</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(n!=-</span><span class="number">1</span><span>){&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//取出扩展名</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;suffix=viewName.substring(n+<span class="number">1</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//取出对应的ViewResolver</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViewResolver&nbsp;resolver=resolvers.get(suffix);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(resolver==</span><span class="keyword">null</span><span>){&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw</span><span>&nbsp;</span><span class="keyword">new</span><span>&nbsp;RuntimeException(</span><span class="string">"No&nbsp;ViewResolver&nbsp;for&nbsp;"</span><span>+suffix);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;&nbsp;resolver.resolveViewName(viewName,&nbsp;locale);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<span class="keyword">else</span><span>{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViewResolver&nbsp;resolver=resolvers.get(<span class="string">"jsp"</span><span>);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;&nbsp;resolver.resolveViewName(viewName,&nbsp;locale);&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>}&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="25" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">import java.util.Locale;
+import java.util.Map;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.ViewResolver;
+
+/** 
+* 说明： 多视图处理器
+* 
+* @author  赵磊 
+* @version 创建时间：2011-8-19 上午09:41:09  
+*/ 
+public class MixedViewResolver implements ViewResolver{
+	private Map&lt;String,ViewResolver&gt; resolvers;
+
+	public void setResolvers(Map&lt;String, ViewResolver&gt; resolvers) {
+		this.resolvers = resolvers;
+	}
+	
+	public View resolveViewName(String viewName,Locale locale) throws Exception{
+		int n=viewName.lastIndexOf(".");
+		if(n!=-1){
+			//取出扩展名
+			String suffix=viewName.substring(n+1);
+			//取出对应的ViewResolver
+			ViewResolver resolver=resolvers.get(suffix);
+			if(resolver==null){
+				throw new RuntimeException("No ViewResolver for "+suffix);
+			}
+			return  resolver.resolveViewName(viewName, locale);
+		}else{
+			ViewResolver resolver=resolvers.get("jsp");
+			return  resolver.resolveViewName(viewName, locale);
+		}
+	}
+}</pre>
+<p>&nbsp;&nbsp;转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">十九、 </span>
+<span style="font-size: medium;">&lt;mvc:annotation-driven /&gt; </span>
+<span style="font-size: medium;">到底做了什么工作</span>
+</strong>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">一句</span>
+<span style="font-size: small;">&lt;mvc:annotation-driven /&gt;实际做了以下工作：（不包括添加自己定义的拦截器）</span>
+</p>
+<p><span style="font-size: small;">我们了解这些之后，对Spring3 MVC的控制力就更强大了，想改哪就改哪里。</span>
+</p>
+<div class="dp-highlighter" id=""><div class="bar"><div class="tools">Xml代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=%20%20%20%20%3C!--%20%E6%B3%A8%E8%A7%A3%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%20%20--%3E%0A%20%20%20%20%3Cbean%20class%3D%22org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping%22%3E%20%20%20%20%20%20%20%20%0A%09%09%3Cproperty%20name%3D%22interceptors%22%3E%0A%09%09%20%20%20%20%3Clist%3E%20%20%0A%09%09%20%20%20%20%09%3Cref%20bean%3D%22logNDCInteceptor%22%2F%3E%20%20%20%3C!--%20%E6%97%A5%E5%BF%97%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%8C%E8%BF%99%E6%98%AF%E4%BD%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8%20--%3E%0A%09%09%20%20%20%20%09%3Cref%20bean%3D%22myRequestHelperInteceptor%22%2F%3E%20%20%20%3C!--%20RequestHelper%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%8C%E8%BF%99%E6%98%AF%E4%BD%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8--%3E%20%0A%09%09%20%20%20%20%09%3Cref%20bean%3D%22myPermissionsInteceptor%22%2F%3E%20%20%3C!--%20%E6%9D%83%E9%99%90%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%8C%E8%BF%99%E6%98%AF%E4%BD%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8--%3E%20%0A%09%09%20%20%20%20%09%3Cref%20bean%3D%22myUserInfoInteceptor%22%2F%3E%20%20%3C!--%20%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%8C%E8%BF%99%E6%98%AF%E4%BD%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8--%3E%20%0A%09%09%20%20%20%20%3C%2Flist%3E%20%20%20%20%20%20%20%20%0A%09%09%3C%2Fproperty%3E%20%20%20%20%20%20%20%20%0A%09%3C%2Fbean%3E%20%20%09%0A%09%3Cbean%20class%3D%22org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter%22%3E%0A%09%09%3Cproperty%20name%3D%22messageConverters%22%3E%20%20%0A%09%09%09%3Clist%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22byteArray_hmc%22%20%2F%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22string_hmc%22%20%2F%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22resource_hmc%22%20%2F%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22source_hmc%22%20%2F%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22xmlAwareForm_hmc%22%20%2F%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22jaxb2RootElement_hmc%22%20%2F%3E%20%20%0A%09%09%09%09%3Cref%20bean%3D%22jackson_hmc%22%20%2F%3E%20%20%0A%09%09%09%3C%2Flist%3E%20%20%0A%09%09%3C%2Fproperty%3E%20%20%0A%09%3C%2Fbean%3E%20%20%0A%09%3Cbean%20id%3D%22byteArray_hmc%22%20class%3D%22org.springframework.http.converter.ByteArrayHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86..%20--%3E%0A%09%3Cbean%20id%3D%22string_hmc%22%20class%3D%22org.springframework.http.converter.StringHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86..%20--%3E%0A%09%3Cbean%20id%3D%22resource_hmc%22%20class%3D%22org.springframework.http.converter.ResourceHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86..%20--%3E%0A%09%3Cbean%20id%3D%22source_hmc%22%20class%3D%22org.springframework.http.converter.xml.SourceHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86..%20--%3E%0A%09%3Cbean%20id%3D%22xmlAwareForm_hmc%22%20class%3D%22org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86..%20--%3E%0A%09%3Cbean%20id%3D%22jaxb2RootElement_hmc%22%20class%3D%22org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86..%20--%3E%0A%09%3Cbean%20id%3D%22jackson_hmc%22%20class%3D%22org.springframework.http.converter.json.MappingJacksonHttpMessageConverter%22%20%2F%3E%3C!--%20%E5%A4%84%E7%90%86json--%3E" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="/images/icon_star.png" alt="收藏代码"><img class="spinner" src="/images/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-xml"><li><span><span>&nbsp;&nbsp;&nbsp;</span><span class="comments">&lt;!--&nbsp;注解请求映射&nbsp;&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"interceptors"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">list</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"logNDCInteceptor"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span><span class="comments">&lt;!--&nbsp;日志拦截器，这是你自定义的拦截器&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"myRequestHelperInteceptor"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span><span class="comments">&lt;!--&nbsp;RequestHelper拦截器，这是你自定义的拦截器--&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"myPermissionsInteceptor"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span><span class="comments">&lt;!--&nbsp;权限拦截器，这是你自定义的拦截器--&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"myUserInfoInteceptor"</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span><span class="comments">&lt;!--&nbsp;用户信息拦截器，这是你自定义的拦截器--&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">list</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"messageConverters"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">list</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"byteArray_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"string_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"resource_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"source_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"xmlAwareForm_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"jaxb2RootElement_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">ref</span><span>&nbsp;</span><span class="attribute">bean</span><span>=</span><span class="attribute-value">"jackson_hmc"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">list</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">property</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;/</span><span class="tag-name">bean</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"byteArray_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.ByteArrayHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理..&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"string_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.StringHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理..&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"resource_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.ResourceHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理..&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"source_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.xml.SourceHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理..&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"xmlAwareForm_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理..&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"jaxb2RootElement_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理..&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li><li><span><span class="tag">&lt;</span><span class="tag-name">bean</span><span>&nbsp;</span><span class="attribute">id</span><span>=</span><span class="attribute-value">"jackson_hmc"</span><span>&nbsp;</span><span class="attribute">class</span><span>=</span><span class="attribute-value">"org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span class="comments">&lt;!--&nbsp;处理json--&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="xml" codeable_id="" codeable_type="BlogComment" source_url="http://elf8848.iteye.com/blog/875830/#" pre_index="26" title="Spring MVC 教程,快速入门,深入分析" style="display: none;">    &lt;!-- 注解请求映射  --&gt;
+    &lt;bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"&gt;        
+		&lt;property name="interceptors"&gt;
+		    &lt;list&gt;  
+		    	&lt;ref bean="logNDCInteceptor"/&gt;   &lt;!-- 日志拦截器，这是你自定义的拦截器 --&gt;
+		    	&lt;ref bean="myRequestHelperInteceptor"/&gt;   &lt;!-- RequestHelper拦截器，这是你自定义的拦截器--&gt; 
+		    	&lt;ref bean="myPermissionsInteceptor"/&gt;  &lt;!-- 权限拦截器，这是你自定义的拦截器--&gt; 
+		    	&lt;ref bean="myUserInfoInteceptor"/&gt;  &lt;!-- 用户信息拦截器，这是你自定义的拦截器--&gt; 
+		    &lt;/list&gt;        
+		&lt;/property&gt;        
+	&lt;/bean&gt;  	
+	&lt;bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"&gt;
+		&lt;property name="messageConverters"&gt;  
+			&lt;list&gt;  
+				&lt;ref bean="byteArray_hmc" /&gt;  
+				&lt;ref bean="string_hmc" /&gt;  
+				&lt;ref bean="resource_hmc" /&gt;  
+				&lt;ref bean="source_hmc" /&gt;  
+				&lt;ref bean="xmlAwareForm_hmc" /&gt;  
+				&lt;ref bean="jaxb2RootElement_hmc" /&gt;  
+				&lt;ref bean="jackson_hmc" /&gt;  
+			&lt;/list&gt;  
+		&lt;/property&gt;  
+	&lt;/bean&gt;  
+	&lt;bean id="byteArray_hmc" class="org.springframework.http.converter.ByteArrayHttpMessageConverter" /&gt;&lt;!-- 处理.. --&gt;
+	&lt;bean id="string_hmc" class="org.springframework.http.converter.StringHttpMessageConverter" /&gt;&lt;!-- 处理.. --&gt;
+	&lt;bean id="resource_hmc" class="org.springframework.http.converter.ResourceHttpMessageConverter" /&gt;&lt;!-- 处理.. --&gt;
+	&lt;bean id="source_hmc" class="org.springframework.http.converter.xml.SourceHttpMessageConverter" /&gt;&lt;!-- 处理.. --&gt;
+	&lt;bean id="xmlAwareForm_hmc" class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" /&gt;&lt;!-- 处理.. --&gt;
+	&lt;bean id="jaxb2RootElement_hmc" class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" /&gt;&lt;!-- 处理.. --&gt;
+	&lt;bean id="jackson_hmc" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" /&gt;&lt;!-- 处理json--&gt;</pre>
+<p>&nbsp;&nbsp;转载请注明出处：原文地址：<a href="/blog/875830">http://elf8848.iteye.com/blog/875830</a>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: medium;">二十、 本文中springMVC.xml配置文件是核心，这里给一个下载地址</span>
+</strong>
+</p>
+<p>&nbsp;</p>
+<p>要在http://www.iteye.com/网站有注册帐号才能下载(这不能怪我)</p>
+<p>&nbsp;</p>
+<p><a target="_blank" href="http://dl.iteye.com/topics/download/82663b25-d84d-392c-9097-e95dcb8f7437">Spring_MVC_教程_快速入门_深入分析V1.1.pdf</a>
+</p>
+<p>&nbsp;</p>
+<p><a target="_blank" href="http://dl.iteye.com/topics/download/eda52cf5-07ed-3604-97ef-9bccabd2a734">SpringMVC核心配置文件示例.rar</a>
+ </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+  </div>

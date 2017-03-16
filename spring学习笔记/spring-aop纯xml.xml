@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	                     http://www.springframework.org/schema/aop
+	                    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	                    http://www.springframework.org/schema/context
+	                    http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	                   ">
+
+
+  <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+  <bean id="personService" class="com.persia.service.impl.PersonServiceImpl"></bean>
+  <bean id="aspectBean" class="com.persia.service.MyInterceptor"></bean>
+
+  <aop:config>
+    <aop:aspect id="myaop" ref="aspectBean">
+      <aop:pointcut id="mycut"
+        expression="execution(* com.persia.service.impl.PersonServiceImpl.*(..))" />
+      <aop:pointcut id="argcut"
+        expression="execution(* com.persia.service.impl.PersonServiceImpl.*(..)) and args(name)" />
+      <aop:before pointcut-ref="mycut" method="doAccessCheck" />
+      <aop:after-returning pointcut-ref="mycut"
+        method="doAfterReturning" />
+      <aop:after-throwing pointcut-ref="mycut"
+        method="doThrowing" />
+      <aop:after pointcut-ref="argcut" method="doAfter"
+        arg-names="name" />
+      <aop:around pointcut-ref="mycut" method="arround" />
+    </aop:aspect>
+  </aop:config>
+</beans>
